@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
+       default-lazy-init="true">
+
+    <bean id="propertyPlaceholder" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreResourceNotFound" value="true" />
+        <property name="locations" ref="sysConfig" />
+    </bean>
+
+    <!-- production环境 -->
+    <beans profile="production">
+        <util:list id="sysConfig">
+            <value>classpath*:/config.properties</value>
+        </util:list>
+
+        <!-- common config -->
+        <bean id="parentDatasource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <!-- 配置初始化大小、最小、最大 -->
+            <property name="maxActive" value="${jdbc.pool.maxActive}" />
+            <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+            <property name="minIdle" value="${jdbc.pool.minIdle}" />
+            <!-- 配置获取连接等待超时的时间 -->
+            <property name="maxWait" value="${jdbc.pool.maxWait}" />
+
+            <!-- 默认自动提交 -->
+            <property name="defaultAutoCommit" value="true" />
+            <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}" />
+            <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+            <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}" />
+            <!-- 获取前检测连接是否有效 -->
+            <property name="testOnBorrow" value="${jdbc.pool.testOnBorrow}" />
+            <!-- 验证连接 -->
+            <property name="validationQuery" value="${jdbc.pool.validationQuery}" />
+        </bean>
+
+        <!-- api -->
+        <bean id="apiMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.jdbc.url}" />
+            <property name="username" value="${api.jdbc.username}" />
+            <property name="password" value="${api.jdbc.password}" />
+        </bean>
+        <bean id="apiSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.slave1.jdbc.url}" />
+            <property name="username" value="${api.slave1.jdbc.username}" />
+            <property name="password" value="${api.slave1.jdbc.password}" />
+        </bean>
+        <bean id="apiSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.slave2.jdbc.url}" />
+            <property name="username" value="${api.slave2.jdbc.username}" />
+            <property name="password" value="${api.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="apiDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="apiMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="apiSlave1DataSource" />
+                    <entry key="slave2" value-ref="apiSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cms -->
+        <bean id="cmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.jdbc.url}" />
+            <property name="username" value="${cms.jdbc.username}" />
+            <property name="password" value="${cms.jdbc.password}" />
+        </bean>
+        <bean id="cmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.slave1.jdbc.url}" />
+            <property name="username" value="${cms.slave1.jdbc.username}" />
+            <property name="password" value="${cms.slave1.jdbc.password}" />
+        </bean>
+        <bean id="cmsSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.slave2.jdbc.url}" />
+            <property name="username" value="${cms.slave2.jdbc.username}" />
+            <property name="password" value="${cms.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="cmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="cmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="cmsSlave1DataSource" />
+                    <entry key="slave2" value-ref="cmsSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- lcms -->
+        <bean id="lcmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.jdbc.url}" />
+            <property name="username" value="${lcms.jdbc.username}" />
+            <property name="password" value="${lcms.jdbc.password}" />
+        </bean>
+        <bean id="lcmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.slave1.jdbc.url}" />
+            <property name="username" value="${lcms.slave1.jdbc.username}" />
+            <property name="password" value="${lcms.slave1.jdbc.password}" />
+        </bean>
+        <bean id="lcmsSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.slave2.jdbc.url}" />
+            <property name="username" value="${lcms.slave2.jdbc.username}" />
+            <property name="password" value="${lcms.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="lcmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="lcmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="lcmsSlave1DataSource" />
+                    <entry key="slave2" value-ref="lcmsSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cas -->
+        <bean id="casMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.jdbc.url}" />
+            <property name="username" value="${cas.jdbc.username}" />
+            <property name="password" value="${cas.jdbc.password}" />
+        </bean>
+        <bean id="casSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.slave1.jdbc.url}" />
+            <property name="username" value="${cas.slave1.jdbc.username}" />
+            <property name="password" value="${cas.slave1.jdbc.password}" />
+        </bean>
+        <bean id="casSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.slave2.jdbc.url}" />
+            <property name="username" value="${cas.slave2.jdbc.username}" />
+            <property name="password" value="${cas.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="casDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="casMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="casSlave1DataSource" />
+                    <entry key="slave2" value-ref="casSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- quartz使用的数据源配置
+        <bean id="quartzDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <property name="driverClassName" value="${quartz.jdbc.driver}" />
+            <property name="url" value="${quartz.jdbc.url}" />
+            <property name="username" value="${quartz.jdbc.username}" />
+            <property name="password" value="${quartz.jdbc.password}" />
+            <property name="defaultAutoCommit" value="true" />
+        </bean> -->
+
+        <!-- log -->
+        <bean id="logMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.jdbc.url}" />
+            <property name="username" value="${log.jdbc.username}" />
+            <property name="password" value="${log.jdbc.password}" />
+        </bean>
+        <bean id="logSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.slave1.jdbc.url}" />
+            <property name="username" value="${log.slave1.jdbc.username}" />
+            <property name="password" value="${log.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="logDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="logMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="logSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+    </beans>
+
+    <!-- test 环境 -->
+    <beans profile="test">
+        <util:list id="sysConfig">
+            <value>classpath*:/config.properties</value>
+            <!--<value>classpath*:/config.test.properties</value>-->
+        </util:list>
+
+        <!-- common config -->
+        <bean id="parentDatasource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <!-- 配置初始化大小、最小、最大 -->
+            <property name="maxActive" value="${jdbc.pool.maxActive}" />
+            <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+            <property name="minIdle" value="${jdbc.pool.minIdle}" />
+            <!-- 配置获取连接等待超时的时间 -->
+            <property name="maxWait" value="${jdbc.pool.maxWait}" />
+
+            <!-- 默认自动提交 -->
+            <property name="defaultAutoCommit" value="true" />
+            <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}" />
+            <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+            <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}" />
+        </bean>
+
+        <!-- api -->
+        <bean id="apiMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.jdbc.url}" />
+            <property name="username" value="${api.jdbc.username}" />
+            <property name="password" value="${api.jdbc.password}" />
+        </bean>
+        <bean id="apiSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.slave1.jdbc.url}" />
+            <property name="username" value="${api.slave1.jdbc.username}" />
+            <property name="password" value="${api.slave1.jdbc.password}" />
+        </bean>
+        <bean id="apiSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.slave2.jdbc.url}" />
+            <property name="username" value="${api.slave2.jdbc.username}" />
+            <property name="password" value="${api.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="apiDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="apiMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="apiSlave1DataSource" />
+                    <entry key="slave2" value-ref="apiSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cms -->
+        <bean id="cmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.jdbc.url}" />
+            <property name="username" value="${cms.jdbc.username}" />
+            <property name="password" value="${cms.jdbc.password}" />
+        </bean>
+        <bean id="cmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.slave1.jdbc.url}" />
+            <property name="username" value="${cms.slave1.jdbc.username}" />
+            <property name="password" value="${cms.slave1.jdbc.password}" />
+        </bean>
+        <bean id="cmsSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.slave2.jdbc.url}" />
+            <property name="username" value="${cms.slave2.jdbc.username}" />
+            <property name="password" value="${cms.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="cmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="cmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="cmsSlave1DataSource" />
+                    <entry key="slave2" value-ref="cmsSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- lcms -->
+        <bean id="lcmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.jdbc.url}" />
+            <property name="username" value="${lcms.jdbc.username}" />
+            <property name="password" value="${lcms.jdbc.password}" />
+        </bean>
+        <bean id="lcmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.slave1.jdbc.url}" />
+            <property name="username" value="${lcms.slave1.jdbc.username}" />
+            <property name="password" value="${lcms.slave1.jdbc.password}" />
+        </bean>
+        <bean id="lcmsSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.slave2.jdbc.url}" />
+            <property name="username" value="${lcms.slave2.jdbc.username}" />
+            <property name="password" value="${lcms.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="lcmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="lcmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="lcmsSlave1DataSource" />
+                    <entry key="slave2" value-ref="lcmsSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cas -->
+        <bean id="casMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.jdbc.url}" />
+            <property name="username" value="${cas.jdbc.username}" />
+            <property name="password" value="${cas.jdbc.password}" />
+        </bean>
+        <bean id="casSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.slave1.jdbc.url}" />
+            <property name="username" value="${cas.slave1.jdbc.username}" />
+            <property name="password" value="${cas.slave1.jdbc.password}" />
+        </bean>
+        <bean id="casSlave2DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.slave2.jdbc.url}" />
+            <property name="username" value="${cas.slave2.jdbc.username}" />
+            <property name="password" value="${cas.slave2.jdbc.password}" />
+        </bean>
+
+        <bean id="casDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="casMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="casSlave1DataSource" />
+                    <entry key="slave2" value-ref="casSlave2DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- quartz使用的数据源配置 -->
+        <bean id="quartzDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <property name="driverClassName" value="${quartz.jdbc.driver}" />
+            <property name="url" value="${quartz.jdbc.url}" />
+            <property name="username" value="${quartz.jdbc.username}" />
+            <property name="password" value="${quartz.jdbc.password}" />
+            <property name="defaultAutoCommit" value="true" />
+        </bean>
+
+        <!-- log -->
+        <bean id="logMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.jdbc.url}" />
+            <property name="username" value="${log.jdbc.username}" />
+            <property name="password" value="${log.jdbc.password}" />
+        </bean>
+        <bean id="logSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.slave1.jdbc.url}" />
+            <property name="username" value="${log.slave1.jdbc.username}" />
+            <property name="password" value="${log.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="logDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="logMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="logSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+    </beans>
+
+    <!-- local development环境 -->
+    <beans profile="development">
+        <util:list id="sysConfig">
+            <value>classpath*:/config.properties</value>
+            <value>classpath*:/config.development.properties</value>
+        </util:list>
+
+        <!-- common config -->
+        <bean id="parentDatasource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <!-- 配置初始化大小、最小、最大 -->
+            <property name="maxActive" value="${jdbc.pool.maxActive}" />
+            <property name="maxIdle" value="${jdbc.pool.maxIdle}" />
+            <property name="minIdle" value="${jdbc.pool.minIdle}" />
+            <!-- 配置获取连接等待超时的时间 -->
+            <property name="maxWait" value="${jdbc.pool.maxWait}" />
+
+            <!-- 默认自动提交 -->
+            <property name="defaultAutoCommit" value="true" />
+            <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+            <property name="timeBetweenEvictionRunsMillis" value="${jdbc.pool.timeBetweenEvictionRunsMillis}" />
+            <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+            <property name="minEvictableIdleTimeMillis" value="${jdbc.pool.minEvictableIdleTimeMillis}" />
+        </bean>
+
+        <!-- api -->
+        <bean id="apiMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.jdbc.url}" />
+            <property name="username" value="${api.jdbc.username}" />
+            <property name="password" value="${api.jdbc.password}" />
+        </bean>
+        <bean id="apiSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.slave1.jdbc.url}" />
+            <property name="username" value="${api.slave1.jdbc.username}" />
+            <property name="password" value="${api.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="apiDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="apiMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="apiSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cms -->
+        <bean id="cmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.jdbc.url}" />
+            <property name="username" value="${cms.jdbc.username}" />
+            <property name="password" value="${cms.jdbc.password}" />
+        </bean>
+        <bean id="cmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.slave1.jdbc.url}" />
+            <property name="username" value="${cms.slave1.jdbc.username}" />
+            <property name="password" value="${cms.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="cmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="cmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="cmsSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- lcms -->
+        <bean id="lcmsMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.jdbc.url}" />
+
+            <property name="username" value="${lcms.jdbc.username}" />
+            <property name="password" value="${lcms.jdbc.password}" />
+        </bean>
+        <bean id="lcmsSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.slave1.jdbc.url}" />
+
+            <property name="username" value="${lcms.slave1.jdbc.username}" />
+            <property name="password" value="${lcms.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="lcmsDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="lcmsMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="lcmsSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- cas -->
+        <bean id="casMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.jdbc.url}" />
+            <property name="username" value="${cas.jdbc.username}" />
+            <property name="password" value="${cas.jdbc.password}" />
+        </bean>
+        <bean id="casSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.slave1.jdbc.url}" />
+            <property name="username" value="${cas.slave1.jdbc.username}" />
+            <property name="password" value="${cas.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="casDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="casMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="casSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- log -->
+        <bean id="logMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.jdbc.url}" />
+            <property name="username" value="${log.jdbc.username}" />
+            <property name="password" value="${log.jdbc.password}" />
+        </bean>
+        <bean id="logSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.slave1.jdbc.url}" />
+            <property name="username" value="${log.slave1.jdbc.username}" />
+            <property name="password" value="${log.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="logDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="logMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="logSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+
+        <!-- quartz使用的数据源配置
+        <bean id="quartzDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <property name="driverClassName" value="${quartz.jdbc.driver}" />
+            <property name="url" value="${quartz.jdbc.url}" />
+            <property name="username" value="${quartz.jdbc.username}" />
+            <property name="password" value="${quartz.jdbc.password}" />
+            <property name="defaultAutoCommit" value="true" />
+        </bean>-->
+
+    </beans>
+
+    <!-- unit 环境 -->
+    <beans profile="unit">
+        <util:list id="sysConfig">
+            <value>classpath*:/config.properties</value>
+            <value>classpath*:/config.unit.properties</value>
+        </util:list>
+
+        <!-- common config -->
+        <bean id="parentDatasource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        </bean>
+
+        <bean id="apiDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${api.jdbc.url}" />
+            <property name="username" value="${api.jdbc.username}" />
+            <property name="password" value="${api.jdbc.password}" />
+        </bean>
+
+        <bean id="cmsDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cms.jdbc.url}" />
+            <property name="username" value="${cms.jdbc.username}" />
+            <property name="password" value="${cms.jdbc.password}" />
+        </bean>
+
+        <bean id="lcmsDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${lcms.jdbc.url}" />
+            <property name="username" value="${lcms.jdbc.username}" />
+            <property name="password" value="${lcms.jdbc.password}" />
+        </bean>
+
+        <bean id="casDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${cas.jdbc.url}" />
+            <property name="username" value="${cas.jdbc.username}" />
+            <property name="password" value="${cas.jdbc.password}" />
+        </bean>
+
+        <!-- quartz使用的数据源配置
+        <bean id="quartzDataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+            <property name="driverClassName" value="${quartz.jdbc.driver}" />
+            <property name="url" value="${quartz.jdbc.url}" />
+            <property name="username" value="${quartz.jdbc.username}" />
+            <property name="password" value="${quartz.jdbc.password}" />
+            <property name="defaultAutoCommit" value="true" />
+        </bean>-->
+
+        <!-- log -->
+        <bean id="logMasterDataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.jdbc.url}" />
+            <property name="username" value="${log.jdbc.username}" />
+            <property name="password" value="${log.jdbc.password}" />
+        </bean>
+        <bean id="logSlave1DataSource" parent="parentDatasource">
+            <property name="driverClassName" value="${jdbc.driver.postgresql}" />
+            <property name="url" value="${log.slave1.jdbc.url}" />
+            <property name="username" value="${log.slave1.jdbc.username}" />
+            <property name="password" value="${log.slave1.jdbc.password}" />
+        </bean>
+
+        <bean id="logDataSource" class="com.gxb.sites.api.db.route.ReadWriteDataSource">
+            <property name="writeDataSource" ref="logMasterDataSource" />
+            <property name="readDataSourceMap">
+                <map>
+                    <entry key="slave1" value-ref="logSlave1DataSource" />
+                </map>
+            </property>
+        </bean>
+    </beans>
+
+</beans>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.asset.dao.AssetDao">
+
+    <insert id="save" parameterType="Asset" useGeneratedKeys="true" keyProperty="id">
+        insert into asset (viewable_id,viewable_type,title,attachment_width,attachment_height,attachment_file_size,attachment_content_type,attachment_file_name,attachment_updated_at
+        ,link,alt,type,position,status,created_at,updated_at)
+        values
+        (#{viewableId},#{viewableType},#{title},#{attachmentWidth},#{attachmentHeight},#{attachmentFileSize},#{attachmentContentType},
+        #{attachmentFileName},#{attachmentUpdatedAt},#{link},#{alt},#{type},#{position},#{status},now(),now())
+    </insert>
+
+    <select id="listAssetByVidVtypeType" parameterType="Asset" resultType="Asset">
+        select id,id as assetId,viewable_id,viewable_type,title,attachment_width,attachment_height,attachment_file_size,
+        attachment_content_type,attachment_file_name,attachment_updated_at,link,alt,type,position,created_at,updated_at,
+        cas_user_id,cms_user_id,status from asset where viewable_id = #{viewableId} and viewable_type = #{viewableType} and type = #{type}
+        order by position
+    </select>
+
+    <update id="updateAsset" parameterType="Asset">
+        update asset set
+        <if test="viewableId != null">
+            viewable_id = #{viewableId},
+        </if>
+        <if test="viewableType != null">
+            viewable_type = #{viewableType},
+        </if>
+        <if test="title != null">
+            title = #{title},
+        </if>
+        <if test="attachmentWidth != null">
+            attachment_width = #{attachmentWidth},
+        </if>
+        <if test="attachmentHeight != null">
+            attachment_height = #{attachmentHeight},
+        </if>
+        <if test="attachmentFileSize != null">
+            attachment_file_size = #{attachmentFileSize},
+        </if>
+        <if test="attachmentContentType != null">
+            attachment_content_type = #{attachmentContentType},
+        </if>
+        <if test="attachmentFileName != null">
+            attachment_file_name = #{attachmentFileName},
+        </if>
+        <if test="attachmentUpdatedAt != null">
+            attachment_updated_at = #{attachmentUpdatedAt},
+        </if>
+        <if test="link != null">
+            link = #{link},
+        </if>
+        <if test="alt != null">
+            alt = #{alt},
+        </if>
+        <if test="type != null">
+            type = #{type},
+        </if>
+        <if test="position != null">
+            position = #{position},
+        </if>
+        <if test="status != null">
+            status = #{status},
+        </if>
+        updated_at=now()
+        where viewable_id = #{viewableId} and viewable_type = #{viewableType} and type = #{type}
+    </update>
+
+</mapper>

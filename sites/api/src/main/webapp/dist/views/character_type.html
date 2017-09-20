@@ -1,0 +1,39 @@
+<div class="page-report-wrap">
+	<div class="share_animation_wrap" ng-if="shareAn">
+		<div class="share_animation" ng-click="hideAnimation()"></div>
+		<div class="share_bg">
+			<div class="wifi-circle first"></div>
+			<div class="wifi-circle second"></div>
+			<div class="wifi-circle third"></div>	
+			<div class="wifi-circle fourth"></div>
+		</div>
+		<p>点击右上角分享给朋友</p>
+	</div>
+	<div ng-class="shareAn?'box':'box02'">
+		<div class="bannerBg">{{list.personalitydesc}}人格解析</div>
+		<div class="content">
+			<div class="pic" ng-if="list.personalitydesc == '和平型'" ng-class="list.personalitydesc == '和平型'?'pic01':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '领袖型'" ng-class="list.personalitydesc == '领袖型'?'pic02':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '活跃型'" ng-class="list.personalitydesc == '活跃型'?'pic03':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '忠诚型'" ng-class="list.personalitydesc == '忠诚型'?'pic04':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '艺术型'" ng-class="list.personalitydesc == '艺术型'?'pic05':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '理智型'" ng-class="list.personalitydesc == '理智型'?'pic06':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '成就型'" ng-class="list.personalitydesc == '成就型'?'pic07':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '助人型'" ng-class="list.personalitydesc == '助人型'?'pic08':''"></div>
+		    <div class="pic" ng-if="list.personalitydesc == '完美型'" ng-class="list.personalitydesc == '完美型'?'pic09':''"></div>
+			<span ng-if="list.personalitydesc == '完美型'">1号完美型人格</span>
+			<span ng-if="list.personalitydesc == '艺术型'">4号艺术型人格</span>
+			<span ng-if="list.personalitydesc == '理智型'">5号理智型人格</span>
+			<span ng-if="list.personalitydesc == '领袖型'">8号领袖型人格</span>
+			<span ng-if="list.personalitydesc == '和平型'">9号和平型人格</span>
+			<span ng-if="list.personalitydesc == '助人型'">2号助人型人格</span>
+			<span ng-if="list.personalitydesc == '活跃型'">7号活跃型人格</span>
+			<span ng-if="list.personalitydesc == '忠诚型'">6号忠诚型人格</span>
+			<span ng-if="list.personalitydesc == '成就型'">3号成就型人格</span>
+			<p>{{list.personalitycharacteristics}}</p>
+		</div>
+	</div>
+	<div class="footer" ng-if="!type">
+		<button ng-click="share()"><i class="iconfont icon-wechat"></i>我要晒一晒</button>
+	</div>
+</div>

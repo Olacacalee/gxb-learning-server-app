@@ -1,0 +1,137 @@
+<div class="pageChapterList" id="pageChapterList">
+    <ul class="chapterList">
+        <li class="chapter__item chapter__item--{{value.chapterId}}" ng-class="value.islock ? 'chapter__item--lock' : ''" ng-repeat="(key, value) in courseData.chapterList">
+            <div class="chapter__item--summary">
+                <a href="javascript:;" ng-click="goViewChapterDetail({'islock': value.islock, 'chapterId': value.chapterId,'sourceId': value.sourceId})">
+                    <div class="chapter__item--image">
+                        <img class="chapter__item--icon" src="images/chapter_{{value.chapterId}}.png">
+                        <span ng-if="value.chapterId != 0" class="chapter__item--mask"></span>
+                    </div>
+                    <div class="chapter__item--name">{{value.name}}</div>
+                </a>
+            </div>
+            <div ng-if="value.chapterId === 4" class="eggs eggs-1 eggs--lock">
+                <div class="eggs__main source" ng-click="goShowVideo({'source': courseData.eggs[0].source})">
+                    <div class="eggs__image">
+                        <img class="eggs__icon eggs__icon--view" src="images/eggs_1.png">
+                    </div>
+                    <div class="eggs__name">{{courseData.eggs[0].title}}</div>
+                </div>
+                <div class="eggs__main shake">
+                    <img class="eggs__icon eggs__icon--explode" src="images/explode_1.png">
+                    <img class="eggs__icon eggs__icon--stone" src="images/stone_1.png">
+                </div>
+                <div class="eggs__mask" ng-if="courseData.eggs[0].unlock"></div>
+            </div>
+            <div ng-if="value.chapterId === 6" class="eggs eggs-2 eggs--lock">
+                <div class="eggs__main source" ng-click="goShowVideo({'source': courseData.eggs[1].source})">
+                    <div class="eggs__image">
+                        <img class="eggs__icon eggs__icon--view" src="images/eggs_2.png">
+                    </div>
+                    <div class="eggs__name">{{courseData.eggs[1].title}}</div>
+                </div>
+                <div class="eggs__main shake">
+                    <img class="eggs__icon eggs__icon--explode" src="images/explode_2.png">
+                    <img class="eggs__icon eggs__icon--stone" src="images/stone_2.png">
+                </div>
+                <div class="eggs__mask" ng-if="courseData.eggs[1].unlock"></div>
+            </div>
+            <div ng-if="value.chapterId === 8" class="eggs eggs-3 eggs--lock">
+                <div class="eggs__main source" ng-click="goShowVideo({'source': courseData.eggs[2].source})">
+                    <div class="eggs__image">
+                        <img class="eggs__icon eggs__icon--view" src="images/eggs_3.png">
+                    </div>
+                    <div class="eggs__name">{{courseData.eggs[2].title}}</div>
+                </div>
+                <div class="eggs__main shake">
+                    <img class="eggs__icon eggs__icon--explode" src="images/explode_3.png">
+                    <img class="eggs__icon eggs__icon--stone" src="images/stone_3.png">
+                </div>
+                <div class="eggs__mask" ng-if="courseData.eggs[2].unlock"></div>
+            </div>
+            <div ng-if="value.chapterId === 10" class="eggs eggs-4 eggs--lock">
+                <div class="eggs__main source" ng-click="goShowVideo({'source': courseData.eggs[3].source})">
+                    <div class="eggs__image">
+                        <img class="eggs__icon eggs__icon--view" src="images/eggs_4.png">
+                    </div>
+                    <div class="eggs__name">{{courseData.eggs[3].title}}</div>
+                </div>
+                <div class="eggs__main shake">
+                    <img class="eggs__icon eggs__icon--explode" src="images/explode_4.png">
+                    <img class="eggs__icon eggs__icon--stone" src="images/stone_4.png">
+                </div>
+                <div class="eggs__mask" ng-if="courseData.eggs[3].unlock"></div>
+            </div>
+        </li>
+    </ul>
+    <div id="profile" ng-click="goPersonal()"></div>
+    <div class="chapter__prograss">
+        <img class="chapter__prograss--background" src="images/chapter_progress_bg.jpg">
+        <div class="chapter__prograss--block flex">
+            <span class="chapter__prograss--text">我的学习进度</span>
+            <div class="progress">
+                <div class="progress-bar" id="progressBar" style="min-width: 2em; width: {{courseData.extra.progresswidth}}">{{courseData.extra.progresswidth}}&nbsp;</div>
+                <div class="progress-tips" id="progressTips">{{courseData.extra.progresstips}}</div>
+            </div>
+        </div>
+        <h2 class="chapter__title">心理健康</h2>
+    </div>
+</div>
+<style type="text/css">
+    .weui-dialog__bd--images{
+        background-image: linear-gradient(to bottom, #00AAFE, #0090FE);
+        color: #fff !important;
+    }
+</style>
+<script type="text/ng-template" id="dialog-chapter-lock">
+<div class="weui-dialog">
+    <div class="weui-dialog__bd weui-dialog__bd--images">{{ngDialogTips}}</div>
+</div>
+</script>
+<script type="text/ng-template" id="dialog-chapter-eggs">
+<div class="weui-dialog">
+    <div class="weui-dialog__bd weui-dialog__bd--images">恭喜你，发现了一个隐藏视频！</div>
+</div>
+</script>
+<script type="text/ng-template" id="dialog4">
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd">
+            <p class="text-left">现在处于2G/3G/4G网络下，是否继续播放视频？</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="hideDialog()">暂不</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="nextDialog()">继续</a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="dialog-chapter-eggs-video">
+<div class="weui-dialog">
+    <div class="weui-dialog__bd">
+        <videogular vg-theme="config.theme" vg-player-ready="onPlayerReady($API)" vg-complete="onCompleteVideo()" vg-update-state="vgUpdateState($state)" vg-virtual-clip-duration="false"  vg-update-time="onUpdateTime($currentTime, $duration)" style="    width: 7.85rem;margin: -1em;">
+            <vg-media ng-if="config.sources" vg-src="config.sources"
+                      vg-tracks="config.tracks">
+            </vg-media>
+            <!-- <vg-controls>
+                <vg-play-pause-button>11</vg-play-pause-button>
+                <vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+                <vg-scrub-bar>
+                    <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                </vg-scrub-bar>
+                <vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+                <vg-volume>
+                    <vg-mute-button></vg-mute-button>
+                    <vg-volume-bar></vg-volume-bar>
+                </vg-volume>
+                <vg-fullscreen-button></vg-fullscreen-button>
+            </vg-controls> -->
+            <vg-overlay-play></vg-overlay-play>
+            <vg-poster vg-url='config.plugins.poster'></vg-poster>
+        </videogular>
+    </div>
+</div>
+</script>
+<style type="text/css">
+    videogular vg-overlay-play, [videogular] vg-overlay-play{
+        left: 0;
+    }
+</style>

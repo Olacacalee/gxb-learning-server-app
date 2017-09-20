@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+	<description>导入项目中的spring配置文件</description>
+
+	<!-- optional-->
+
+	<!--<import resource="schedule/spring-quartz-cron-local.xml" />-->
+
+
+	<!--<import resource="schedule/spring-quartz-timer-cluster.xml" />-->
+
+
+
+	<!-- db -->
+	<import resource="db/spring-mybatis.xml" />
+	<import resource="db/spring-db.xml" />
+
+	<import resource="spring-httpClient.xml" />
+	<!-- cache -->
+	<import resource="cache/spring-redis.xml" />
+
+
+</beans>

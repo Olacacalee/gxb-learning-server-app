@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.userinfo.dao.UserInfoDao">
+
+    <select id="getUserInfoByUserId" resultType="ElectiveUserInfo">
+        SELECT * from elective_user_info where user_id = #{userId} and deleted=0 limit 1;
+    </select>
+
+
+    <select id="getUserInfoByUserUnionID" resultType="ElectiveUserInfo">
+        SELECT * from elective_user_info where union_id= #{unionid} and deleted=0;
+    </select>
+
+
+    <select id="getUserLockByUnionID" resultType="Integer">
+        SELECT ifnull(max(userlock),0) from elective_user_info where union_id= #{unionid} and deleted=0;
+    </select>
+
+
+    <select id="getUserIDInfoByUserUnionID" resultType="Long">
+        SELECT user_id from elective_user_info where union_id= #{unionid} and deleted=0;
+    </select>
+
+
+    <select id="getIDInfoByUserUnionID" resultType="Long">
+        SELECT ifnull(max(id),0) from elective_user_info where union_id= #{unionid} and deleted=0;
+    </select>
+
+    <select id="findPersonalityByUnionId" resultType="Integer">
+        SELECT
+            personality_type
+        FROM
+            elective_user_info
+        WHERE
+            union_id = #{unionid}
+                AND deleted = 0
+    </select>
+
+    <select id="findUserInfoByUserId" resultType="Integer">
+        SELECT count(*) from elective_user_info where id= #{id} and deleted=0;
+    </select>
+
+    <select id="getUserPersonalityType" resultType="Integer">
+        SELECT personality_type from elective_user_info where user_id= #{userid} and deleted=0;
+    </select>
+
+    <select id="getUserPersonalityTypeByUnionID" resultType="Integer">
+        SELECT ifnull(max(personality_type),0) from elective_user_info where union_id= #{unionid} and deleted=0;
+    </select>
+
+    <update id="applyScore" parameterType="Long">
+        UPDATE elective_user_info set exchange_credits = 1 where user_id = #{userId} and deleted=0
+    </update>
+
+    <update id="updateUserLock" parameterType="ElectiveUserInfo">
+        update elective_user_info set userlock =#{lock} where user_id=${id} and deleted=0
+    </update>
+
+    <update id="updateUserLockByUnionID" parameterType="ElectiveUserInfo">
+        update elective_user_info set userlock =#{lock} where union_id=#{unionid} and deleted=0
+    </update>
+
+    <select id="findALLExaminations" resultType="UserInfo">
+        SELECT
+        *
+        FROM
+        elective_user_info
+        WHERE
+        user_id = #{userid} AND deleted = 0
+    </select>
+
+
+    <select id="findUserByUnionid" resultType="UserInfo">
+        SELECT
+        *
+        FROM
+        elective_user_info
+        WHERE
+        union_id = #{unionid} AND deleted = 0
+    </select>
+
+
+
+
+    <insert id="save" parameterType="UserInfo" useGeneratedKeys="true" keyProperty="userId">
+        insert into elective_user_info (user_id, personality_type) value(#{userid}, #{personalitytype})
+    </insert>
+
+    <insert id="saveUserUnionid" parameterType="String" useGeneratedKeys="true" keyProperty="id">
+        insert into elective_user_info (union_id,user_id,creation_time) value(#{unionid},0,now())
+    </insert>
+
+    <insert id="saveUserInfoByUnionId" parameterType="ElectiveUserInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into elective_user_info (union_id,user_id,creation_time) value(#{unionid},#{userId},now())
+    </insert>
+
+    <update id="update" parameterType="ElectiveUserInfo">
+        UPDATE elective_user_info
+        SET
+        <if test="personalitytype != null">
+            personality_type = #{personalitytype},
+        </if>
+        <if test="selfconscious != null">
+            self_conscious = #{selfconscious},
+        </if>
+        <if test="personalitycharacteristics != null">
+            personality_characteristics = #{personalitycharacteristics},
+        </if>
+        <if test="careerplanning != null">
+            career_planning = #{careerplanning},
+        </if>
+        <if test="learningpsychology != null">
+            learning_psychology = #{learningpsychology},
+        </if>
+        <if test="emotionalmanagement != null">
+            emotional_management = #{emotionalmanagement},
+        </if>
+        <if test="interpersonalcommunication != null">
+            interpersonal_communication = #{interpersonalcommunication},
+        </if>
+        <if test="loveemotion != null">
+            love_emotion = #{loveemotion},
+        </if>
+        <if test="pressuremanagement != null">
+            pressure_management = #{pressuremanagement},
+        </if>
+        deleted = 0
+        WHERE
+            union_id = #{unionid} AND deleted = 0
+    </update>
+
+    <update id="updateUserIdByUnionId" >
+        update elective_user_info set user_id = #{userId} where union_id = #{unionid}
+    </update>
+
+    <update id="updateReportTime" parameterType="ElectiveUserInfo">
+        update elective_user_info set report_time = #{reportTime} where id = #{id}
+    </update>
+
+    <select id="getById" resultType="ElectiveUserInfo">
+        SELECT * from elective_user_info where id = #{id} and deleted = 0
+    </select>
+
+</mapper>

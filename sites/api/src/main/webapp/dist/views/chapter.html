@@ -1,0 +1,74 @@
+<ion-view hide-nav-bar="true">
+    <ion-content scroll="false" id="chapter_wrap">
+        <ion-scroll style="width: 100%;height: 90%;">
+            <div class="chapter-content">
+                <div class="chapter-header">
+                    <h3><i>{{chapterData.cource.chapterId}}</i><span>/</span>{{chapterData.cource.cource}}</h3>
+                    <p>{{chapterData.cource.courcedescribe}}</p>
+                </div>
+                <ul class="chapter-list">
+                    <li class="flex" ng-if="chapterData.data" ng-repeat="list in chapterData.data" ng-click="showVideo(list.type,list.id,list.source,list.schedule,list.duration,$index)">
+                        <i class="icon {{{true:'icon-video',false:'icon-test'}[list.type=='1']}}"></i>
+                        <div class="flex1">
+                            <p class="chapter-title">{{list.cource}}</p>
+                            <div class="progress-bar" ng-if="list.type==1">
+                                <div style="width:{{(list.schedule/list.duration)*100}}%;"></div>
+                            </div>
+                        </div>
+                        <div class="flex1 text-right">
+                            <div ng-if="list.type==1&&list.schedule&&(list.schedule!=list.duration)">
+                                <button class="chapter-list-btn">继续学习</button>
+                                <span class="chapter-time">{{list.schedule/60 | shortNumber}}'{{list.schedule%60}}"</span>
+                            </div>
+                            <div ng-if="list.type==1&&(list.schedule==0)">
+                                <span class="chapter-time">{{list.duration/60 | shortNumber}}'{{list.duration%60}}"</span>
+                                <button class="chapter-list-btn">开始学习</button>
+                            </div>
+                            <span ng-if="list.type==1&&(list.schedule>=list.duration)" class="chapter-ok">已完成</span>
+                            <span class="chapter-time" ng-if="list.type==2">{{list.duration}}题目</span>
+                        </div>
+                    </li>
+                    <div ng-if="chapterData.tiaoguo" class="tiaoguo">
+                        <div class="jump"></div>
+                    </div>
+                </ul>
+                <footer class="pos-bottom">
+                    <button class="btn btn-blue btn-bd-gradient" ng-click="nextChapter()"><i class="icon icon-lock"></i>解锁下一章</button>
+                </footer>
+            </div>
+            <div class="videogular-container videogular-container1" style="display:none;">
+                <videogular vg-theme="config.theme"  vg-player-ready="onPlayerReady($API)" vg-update-state="vgUpdateState($state)">
+                    <vg-media ng-if="config.sources" vg-src="config.sources" vg-tracks="config.tracks"></vg-media>
+
+                    <vg-controls>
+                        <vg-time-display>{{ currentTime | date:'mm:ss' }}</vg-time-display>
+                        <vg-scrub-bar>
+                            <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
+                        </vg-scrub-bar>
+                        <vg-time-display>{{ timeLeft | date:'mm:ss' }}</vg-time-display>
+                    </vg-controls>
+                </videogular>
+            </div>
+            <div id="iswifi" style="display:none;">
+                <div id="ngdialog1" class="ngdialog ngdialog-theme-default ng-scope" role="alertdialog" aria-describedby="ngdialog1-aria-describedby">
+                    <div class="ngdialog-overlay"></div>
+                    <div class="ngdialog-content" role="document">
+                        <div class="ngDialog-text text-center ngDialog-wifi">
+                            <p id="ngdialog1-aria-describedby">现在处于2G/3G/4G网络下，是否继续播放视频？</p>
+                            <div class="flex">
+                                <button class="btnNo flex1" ng-click="btnNo()">否</button>
+                                <button class="btnYes flex1" ng-click="btnYes()">是</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script type="text/ng-template" id="externalTemplate.html">
+                <p class="ngDialog-text text-center">第{{_is_lock.index+1}}个还没有做完哦！</p>
+            </script>
+            <script type="text/ng-template" id="error.html">
+                <p class="ngDialog-text text-center">{{msg}}</p>
+            </script>
+        </ion-scroll>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,9 @@
+<div class="tabs">
+  <div class="line"></div>
+  <ul>
+    <li ng-class="supIsActive==1?'active':''" ng-click="goSupervise()"><span ng-class="supIsActive==1?'icon-_sel3':'icon-_def3'"></span><b>教学监督</b></li>
+    <li ng-class="queIsActive==1?'active':''" ng-click="goQuestion()"><span ng-class="queIsActive==1?'icon-_sel':'icon-_def'"></span><b>答疑</b></li>
+    <li ng-class="annIsActive==1?'active':''" ng-click="goAnnounceTab()"><span ng-class="annIsActive==1?'icon-_sel2':'icon-_def2'" style="padding-left:5px;"></span><b>公告</b></li>
+    <li ng-class="clsIsActive==1?'active':''" ng-click="goClasses()"><span ng-class="clsIsActive==1?'icon-_sel4':'icon-_def4'"></span><b>课堂</b></li>
+  </ul>
+</div>

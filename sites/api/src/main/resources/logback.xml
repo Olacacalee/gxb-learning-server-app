@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://www.padual.com/java/logback.xsd">
+
+	<!--# 按时间滚动的策略 -->
+	<appender name="defaultLogFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 过滤掉 小于ERROR级别日志-->   
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">   
+			<level>ERROR</level>   
+		</filter>
+		
+		<file>logs/elective.log</file>
+		
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>logs/elective.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 保留 30天数据，默认无限-->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		
+		<encoder>
+			<pattern>[%-5level %d{HH:mm:ss.SSS} | %thread | %logger.%method] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<!-- root -->
+	<root level="ERROR">
+		<appender-ref ref="defaultLogFile" />
+	</root>
+
+	<!-- 推送  start-->
+	<appender name="messagePushFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<!-- 过滤掉 小于ERROR级别日志-->
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>INFO</level>
+		</filter>
+
+		<file>../logs/hybird_api_messagepush.log</file>
+
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>../logs/hybird_api_messagepush.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- 保留 30天数据，默认无限-->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+
+		<encoder>
+			<pattern>%msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<logger name="messagePushLogger" level="INFO" additivity="false">
+		<appender-ref ref="messagePushFile" />
+	</logger>
+	<!-- 推送  end-->
+	
+</configuration>

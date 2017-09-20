@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.combinedaccount.dao.CombinedAccountDao">
+
+    <insert id="save" parameterType="CombinedAccount" useGeneratedKeys="true" keyProperty="combinedAccountId">
+        insert into combined_account (user_id, login_key, key_type, nick_name, union_id, open_id, delete_flag)
+        values
+        (#{userId}, #{loginKey}, #{keyType}, #{nickName}, #{unionId}, #{openId}, #{deleteFlag})
+    </insert>
+
+    <select id="getByOpenIdAndUnionId" resultType="CombinedAccount">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT ca.*,u.mobile as mobile from combined_account ca left join user u on ca.user_id = u.user_id
+        where ca.union_id = #{unionId}
+        and ca.key_type = 'WECHAT'
+        and ca.delete_flag = #{DELETE_FLAG_AVAILABLE}
+    </select>
+
+    <update id="update" parameterType="CombinedAccount">
+        update combined_account set
+        <if test="userId != null">
+            user_id=#{userId},
+        </if>
+        <if test="loginKey != null">
+            login_key=#{loginKey},
+        </if>
+        <if test="keyType != null">
+            key_type=#{keyType},
+        </if>
+        <if test="unionId != null">
+            union_id=#{unionId},
+        </if>
+        <if test="openId != null">
+            open_id=#{openId},
+        </if>
+        <if test="deleteFlag != null">
+            delete_flag=#{deleteFlag},
+        </if>
+        updated_at=now()
+        where combined_account_id = #{combinedAccountId}
+    </update>
+
+    <select id="getByLoginKeyOrUnionId" resultType="CombinedAccount">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        select * from combined_account where (login_key = #{loginKey} or union_id = #{unionId}) and key_type = #{keyType} and delete_flag = #{DELETE_FLAG_AVAILABLE};
+    </select>
+
+    <select id="getByUserId" resultType="CombinedAccount">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT * from combined_account where key_type='WECHAT' and user_id = #{userId} and delete_flag = #{DELETE_FLAG_AVAILABLE} and union_id is not null;
+    </select>
+
+</mapper>

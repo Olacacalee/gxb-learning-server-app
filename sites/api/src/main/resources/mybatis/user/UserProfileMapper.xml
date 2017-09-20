@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.user.dao.UserProfileDao">
+
+    <insert id="save" parameterType="UserProfile" useGeneratedKeys="true" keyProperty="userId">
+
+        insert into user_profile (user_id,register_from,platform,fail_attempts,
+        created_at,updated_at)
+        values
+        (#{userId},#{registerFrom},#{platform},#{failAttempts},
+        #{createdAt},#{updatedAt})
+    </insert>
+
+</mapper>

@@ -1,0 +1,99 @@
+<div class="page-personal-wrap">
+	<div class="header">
+		<div class="pic">
+			<img src="{{UserInfo.avatar}}" alt="">
+		</div>
+		<p class="name">{{UserInfo.nickname}}</p>
+		<ul class="nav">
+			<li ng-click="goReport()">
+				<i class="iconfont icon-shape"></i>
+				<span>我的认知报告</span>
+			</li>
+			<li class="li02" ng-click="goCredit()">
+				<i class="iconfont icon-exchange"></i>
+				<span>我的学分</span>
+			</li>
+			<li ng-click="goSetting()">
+				<i class="iconfont icon-setting"></i>
+				<span>设置</span>
+			</li>
+		</ul>
+		<div class="location" ng-if="tab == 0"></div>
+		<div class="location active" ng-if="tab == 1"></div>
+		<div class="location cur" ng-if="tab == 2"></div>
+	</div>
+	<div class="content">
+		<div class="report" ng-if="tab == 0">
+			<div class="report-wrap" ng-if="status == '1'">
+				<div class="reportBg"></div>
+				<p>你的专属认知报告还未生成，请先学完全部课程哦！</p>
+			</div>
+			<div class="create-wrap" ng-if="status == '0'">
+				<span ng-bind-html="date(data.time)"></span>
+				<p>我成为第</p>
+				<span class="no">{{data.count}}</span>
+				<p>位拿到报告的童鞋</p>
+				<button ng-click="goMake()">查看认知报告<i class="iconfont icon-shape"></i></button>
+				<div class="earthBg"></div>
+			</div>
+		</div>
+		<div class="credit" ng-if="tab == 1">
+			<div class="noCredit" ng-if="status == '1'">
+				<div class="creditBg"></div>
+				<p>你的学分还无法申请，请先学完全部课程并获得认知报告哦！</p>
+			</div> 
+			<div class="applyFor" ng-if="credit && status == '0'">
+				<div class="creditBg applyBg"></div>
+				<div class="creditBtn" ng-click="applyFor()"><span class="iconfont icon-exchange"></span>申请学分</div>
+			</div>
+			
+			<div class="getCredit" ng-if="report == 0">
+				<div class="creditBg getBg">
+					<div class="flagBg rollIn"></div>
+					<div class="flagBg01 roll"></div>
+				</div>
+				<p>你已得到2学分</p>
+				<div class="creditBtn gain"><span class="iconfont icon-exchange"></span>已获得学分</div>
+			</div>
+
+			<div class="getCredit" ng-if="!credit && report == 1">
+				<div class="creditBg endBg"></div>
+				<p>你已得到2学分</p>
+				<div class="creditBtn gain"><span class="iconfont icon-exchange"></span>已获得学分</div>
+			</div>
+			
+		</div>
+		<div class="setting" ng-if="tab == 2">
+			<ul class="network">
+				<li>允许2G/3G/4G网络下播放</li>
+				<li>
+					<div class="" ng-click="open()" ng-class="isOpen?'isOpen':'close'">
+						<div class="round"></div>
+					</div>
+				</li>
+			</ul>
+			<div class="opinion" ng-click="writeIdea()" ng-if="isWrite == false">意见反馈</div>
+			<div class="idea" ng-if="isWrite">
+				<div class="title">意见反馈</div>
+				<div class="box">
+					<textarea name="" id="" placeholder="在这里输入您的反馈......" ng-model="credit.text"></textarea>
+					<div class="btn">
+						<span ng-click="cancel()"><i class="iconfont icon-cancel"></i>取消</span>
+						<span ng-click="send(credit.text)"><i class="iconfont icon-send"></i>发送</span>
+					</div>
+				</div> 
+			</div> 
+			<div class="about" ng-click="getAbout()" ng-if="!isAbout">关于高校邦</div>
+			<div class="idea" ng-click = "getClose()" ng-if="isAbout">
+				<div class="title">关于高校邦</div>
+				<div class="box aboutBox">
+					<div class="gxb">专注于为高等院校打造的基于SaaS模式的专属在线学习平台，提供课程、平台和服务于一体的一站式解决方案。</div>
+				</div> 
+			</div>
+		</div>
+	</div>
+</div>
+
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">{{message}}</p>
+</script>

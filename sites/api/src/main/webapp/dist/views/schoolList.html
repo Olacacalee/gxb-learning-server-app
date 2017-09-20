@@ -1,0 +1,22 @@
+<div class="page-schoolList-wrap">
+	<div class="header text-center">
+		<div class="flex search-content">
+			<i class="icon icon-serach"></i>
+			<input type="text" placeholder="请输入学校名称进行查询" ng-model="searchName" class="flex1" />
+		</div>
+	</div>
+	<ul class="school-list" ng-show="searchName!=''&&(schoolListData|filter:searchName).length!=0">
+		<li ng-repeat="schoolList in schoolListData  | filter:{name:searchName}" ng-click="schoolListClick(schoolList.tenantId,schoolList.name)">
+			{{schoolList.name}}
+		</li>
+	</ul>
+	<div class="tu text-center" ng-show="searchName==''">
+		<img src="images/nologin.png" />
+		<P>我们已覆盖全国1000多所高校</P>
+		<P>请选择您的学校</P>
+	</div>
+	<div ng-show="searchName!=''&&(schoolListData|filter:searchName).length==0" class="no_learn_wrap">
+        <img src="images/nosearch.png" alt="" />
+        <p class="no_inter">未搜索到相应的学校，请重试。</p>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<div class="page-bind-wrap page-register-wrap">
+	<div class="header">
+		<div class="headerBg"></div>
+		<div class="headSculpture">
+			<img src="{{wxUserInfo.avatar}}" alt="">
+		</div>
+		<p class="name" style="line-height: 70px;">{{wxUserInfo.nickname}}</p>
+		<div class="prompt" style="width: 70%;margin:0 auto;line-height: 40px;">你还没有高校邦账号哦，请为你的高校邦账号设置个密码吧！</div>
+	</div>
+	<div class="content">
+		<div class="conBg registerBg"></div>
+		<input class="phone" type="password" placeholder="密码" ng-model="register.password">
+	</div>
+	<div class="foot">
+		<div class="footBg">
+			<div class="counter" ng-click="register()"></div>
+		</div>
+	</div>
+</div>
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">{{message}}</p>
+</script>

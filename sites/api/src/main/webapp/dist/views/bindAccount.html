@@ -1,0 +1,48 @@
+<div class="page-bind-wrap">
+	<div class="header">
+		<div class="headerBg"></div>
+		<div class="headSculpture">
+			<img src="{{userObj.avatar}}" alt="">
+		</div>
+		<p class="name">{{userObj.nickname}}</p>
+		<div class="prompt">请先绑定高校邦账号，再继续认知之旅吧！</div>
+	</div>
+	<div class="content">
+		<div class="conBg"></div>
+		<input class="phone" type="text" placeholder="手机号" ng-model="account.mobile">
+		<input class="phone" type="text" placeholder="验证码" ng-model="account.validateCode">
+		<span ng-if="!account.mobile" ng-class="!account.mobile?'no_yzm':''"><i>点击获取</i></span>
+		<span ng-if="account.mobile" ng-class="paracont == '点击获取'?'get_code':'no_yzm'" ng-click="getCode()"><i ng-bind-html="paracont"></i></span>
+	</div>
+	<div class="foot">
+		<div class="footBg">
+			<div class="counter" ng-click="submit()"></div>
+		</div>
+	</div>
+</div>
+
+<!-- <div id="loadingToast" class="weui_loading_toast" style="display:{{loading}};">
+  <div class="weui_mask_transparent"></div>
+  <div class="weui_toast">
+    <div class="weui_loading"> -->
+      <!-- :) -->
+      <!-- <div class="weui_loading_leaf weui_loading_leaf_0"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_1"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_2"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_3"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_4"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_5"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_6"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_7"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_8"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_9"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_10"></div>
+      <div class="weui_loading_leaf weui_loading_leaf_11"></div>
+    </div>
+    <p class="weui_toast_content">数据加载中</p>
+  </div>
+</div> -->
+
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">{{message}}</p>
+</script>

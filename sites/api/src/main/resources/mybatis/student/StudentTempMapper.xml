@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.student.dao.StudentTempDao">
+
+    <select id="getByNoAndTenantIdAndName" parameterType="hashmap" resultType="StudentTemp">
+        select * from student_temp where no = #{no} and tenant_id = #{tenantId} and name = #{name}
+    </select>
+
+    <update id="update" parameterType="StudentTemp">
+        update student_temp set
+        student_id = #{studentId},user_id = #{userId},no = #{no},name = #{name},gender = #{gender},
+        mobile = #{mobile},email = #{email},major = #{major},school_name = #{schoolName},school_department = #{schoolDepartment},
+        school_grade = #{schoolGrade},school_class = #{schoolClass},enrollment_at = #{enrollmentAt},status = #{status},
+        confirmed_at = #{confirmedAt},tenant_id = #{tenantId},import_flag = #{importFlag},created_at = #{createdAt},updated_at = #{updatedAt}
+        where id = #{id}
+
+    </update>
+
+</mapper>

@@ -1,0 +1,99 @@
+<div class="page-quiz-wrap">
+	<div class="guide" ng-click="hideGuide()" ng-show="guide"></div>
+	<ul id="slider">
+		<li ng-repeat="list in topicList">
+			<div class="quiz-name">
+				<div class="title">{{title}}</div>
+				<div class="progress">
+        			<dl class="barBox">
+            			<dd class="barLine">
+                			<div class="charts" style="width:{{progressW(list.sort)}};min-width: 2em;">
+                				<span class="topic">{{list.sort}}/{{topicList.length}}</span>
+                			</div>
+            			</dd>
+        			</dl>
+    			</div>
+    			<div class="question">{{list.title}}</div>
+				<div class="choose" ng-if="list.type == 0"><span>单选</span></div>
+				<div class="choose" ng-if="list.type == 1"><span>多选</span></div>
+				<div class="choose" ng-if="list.type == 2"><span>判断</span></div>
+			</div>
+			<div class="con">
+				<dl ng-if="list.type == '2' || list.type == '0'" ng-click="doAnswer(list.type,l.type,$index,list.id,list.sort)" ng-repeat="l in list.optionsList" ng-class="choice[list.sort-1][$index] == l.type?'add':''">
+					<dt>{{l.type}}</dt>
+					<dd >{{l.content}}</dd>
+				</dl>
+				<dl ng-if="list.type == '1'" ng-click="doAnswer(list.type,l.type,$index,list.id,list.sort)" ng-repeat="l in list.optionsList" ng-class="choice[list.sort-1][$index] == l.type?'add':''">
+					<dt>{{l.type}}</dt>
+					<dd >{{l.content}}</dd>
+				</dl>
+			</div>
+		</li>
+	</ul>
+	<div class="foot">
+		<div ng-if="show" style="padding:0 0.53334rem;">
+			<span>未回答题目:</span>
+			<ul>
+				<li ng-repeat="an in noAnswer" ng-click="goTopic(an)" ng-if="$index<3">{{an}}</li>
+			</ul>
+			<button class="btn" ng-click="getSubmit()">提交</button>
+		</div>
+		<div ng-if="!show" style="text-align: center;">
+			<button class="button" ng-click="getSubmit()">提交</button>
+		</div>
+	</div>
+</div>
+<script type="text/ng-template" id="dialog2">
+	<div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">{{test.testtitle}}</strong></div>
+        <div class="weui-dialog__bd quiz_ball_wrap">
+            <p id="ngdialog7-aria-describedby" class="sort"><span>你的得分为：<span><span class="score">{{test.score}}</span>分</span></span><span>属于：<span class="score">{{test.desc}}</span></span></p>
+            <p class="text-left result">{{test.result}}</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="AgainTpoic()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="goChapter()">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog3">
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">{{test.testtitle}}</strong></div>
+        <div class="weui-dialog__bd quiz_ball_wrap">
+            <p class="answer" ng-if="test.wrong < 2">你答对了<span class="right">{{test.right}}</span>道题，答错了<span class="wrong">{{test.wrong}}</span>道题，你真棒！</p>
+            <p class="answer" ng-if="test.wrong >1">你答对了<span class="right">{{test.right}}</span>道题，答错了<span class="wrong">{{test.wrong}}</span>道题，继续加油</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="AgainTpoic()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="goChapter()">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">还有题目未回答哦！</p>
+</script>
+
+<script type="text/ng-template" id="dialog7">
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd quiz_ball_wrap">
+            <div class="picture" ng-if="test.desc == '和平型'" ng-class="test.desc == '和平型'?'pic01':''"></div>
+            <div class="picture" ng-if="test.desc == '领袖型'" ng-class="test.desc == '领袖型'?'pic02':''"></div>
+            <div class="picture" ng-if="test.desc == '活跃型'" ng-class="test.desc == '活跃型'?'pic03':''"></div>
+            <div class="picture" ng-if="test.desc == '忠诚型'" ng-class="test.desc == '忠诚型'?'pic04':''"></div>
+            <div class="picture" ng-if="test.desc == '艺术型'" ng-class="test.desc == '艺术型'?'pic06':''"></div>
+            <div class="picture" ng-if="test.desc == '理智型'" ng-class="test.desc == '理智型'?'pic05':''"></div>
+            <div class="picture" ng-if="test.desc == '成就型'" ng-class="test.desc == '成就型'?'pic07':''"></div>
+            <div class="picture" ng-if="test.desc == '助人型'" ng-class="test.desc == '助人型'?'pic08':''"></div>
+            <div class="picture" ng-if="test.desc == '完美型'" ng-class="test.desc == '完美型'?'pic09':''"></div>
+            <p class="text">你的性格类型是：<span ng-click="getIntro()">{{test.desc}}</span></p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="AgainTpoic()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="goChapter()">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+

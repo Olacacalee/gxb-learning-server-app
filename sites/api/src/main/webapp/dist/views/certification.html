@@ -1,0 +1,29 @@
+<div class="page-certification-wrap">
+	<div class="header text-center">
+		<h3>填写认证信息</h3>
+		<p>赶快认证一下身份吧，学课程，修学分，付出就会有回报~</p>
+	</div>
+	<ul class="certification-list">
+		<li class="schoolCotent">
+			<img src="images/schoolImg.png" class="icon" />
+			<p id="schoolName" ng-click="changeSchool()">{{schoolMsg.name}}</p>
+		</li>
+		<li>
+			<img src="images/school2.png" class="icon" />
+			<input type="text" placeholder="填写你在本校的学号" id="tenantId" />
+		</li>
+		<li>
+			<img src="images/school3.png" class="icon" />
+			<input type="text" placeholder="输入你的真实姓名" id="userName" />
+		</li>
+	</ul>
+	<div class="foot">
+		<div class="footBg">
+			<button class="btn btn-certification" ng-click="bindingSchoolBtn()"></button>
+		</div>
+	</div>
+</div>
+
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">{{message}}</p>
+</script>

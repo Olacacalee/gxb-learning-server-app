@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	 http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+		
+	<!-- 自动扫描且只扫描@Controller -->
+	<context:component-scan base-package="com.gxb" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+	</context:component-scan>
+	<!-- 配置使Spring采用CGLIB代理 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<mvc:annotation-driven>
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+		    	<constructor-arg value="UTF-8" />
+			</bean>
+			<!-- 将Jackson2HttpMessageConverter的默认格式化输出设为true -->
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="prettyPrint" value="true"/>
+            </bean>
+  		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+	<mvc:default-servlet-handler/>
+
+	<!-- 配置拦截器 -->
+    <mvc:interceptors>
+    	<!-- 性能监控 -->
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**"/>
+    		<bean class="com.gxb.modules.core.web.filter.PerformanceMonitorInterceptor" />
+    	</mvc:interceptor>
+    	<!-- 登陆验证 -->
+    	<!-- 权限验证 -->
+		<mvc:interceptor>
+			<mvc:mapping path="/**"/>
+			<bean class="com.gxb.sites.api.sys.auth.AccessTokenInterceptor" />
+		</mvc:interceptor>
+    	<!-- 操作日志 -->
+		<!--<mvc:interceptor>-->
+			<!--<mvc:mapping path="/**"/>-->
+			<!--<bean class="com.gxb.sites.api.web.handler.OperateLogInterceptor" />-->
+		<!--</mvc:interceptor>-->
+    	<!-- 禁止重复提交 -->
+    </mvc:interceptors>
+    
+</beans>

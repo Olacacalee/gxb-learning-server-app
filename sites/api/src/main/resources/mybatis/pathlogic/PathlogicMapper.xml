@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.pathlogic.dao.PathlogicDao">
+
+    <select id="findALLExaminations" resultType="Integer" >
+        SELECT
+            cource_id
+        FROM
+            elective_pathlogic
+        WHERE
+            personality_type = #{personalitytype} AND sort = #{cource}
+                AND deleted = 0
+    </select>
+
+    <select id="getPathLogicByPtype" resultType="PathLogic">
+       select distinct(cource_id)
+          from elective_user_schedule
+          where cource_id in
+          (select distinct(p.cource_id)
+          from elective_user_info u,elective_pathlogic p
+          where u.personality_type=p.personality_type
+          and u.union_id=#{unionid}
+          order by p.sort asc)
+          and union_id=#{unionid}
+          and deleted=0
+          order by creation_time asc
+    </select>
+
+
+    <select id="findCourceId" resultType="Integer" >
+        SELECT
+        cource_id
+        FROM
+        elective_pathlogic
+        WHERE
+        personality_type = #{personalitytype} AND sort = #{lock}
+        AND deleted = 0
+        group by sort
+        order by sort
+    </select>
+
+
+</mapper>

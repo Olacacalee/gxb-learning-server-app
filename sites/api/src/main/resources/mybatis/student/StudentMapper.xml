@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.student.dao.StudentDao">
+
+    <insert id="save" parameterType="Student" useGeneratedKeys="true" keyProperty="studentId">
+
+        insert into student (student_id,user_id,no,name,major,school_name,school_department,school_grade,
+        school_class,enrollment_at,status,remark,confirmed_at,tenant_id,delete_flag,
+        created_at,updated_at)
+        values
+        (#{studentId},#{userId},#{no},#{name},#{major},#{schoolName},#{schoolDepartment},#{schoolGrade},
+        #{schoolClass},#{enrollmentAt},#{status},#{remark},#{confirmedAt},#{tenantId},#{deleteFlag},
+        #{createdAt},#{updatedAt})
+    </insert>
+
+    <select id="getByUserIdTo" resultType="Student">
+        select s.*,t.name tenantName from student s
+        left join tenants t on t.id=s.tenant_id
+        where user_id = #{userId}
+    </select>
+
+    <select id="countByUserIdAndTenantId" resultType="Integer">
+        SELECT count(1) from student where user_id = #{0} and tenant_id = #{1}
+    </select>
+
+    <select id="getBindingInfo" resultType="Student">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT s.*,t.name as tenant_name from student s join tenants t on s.tenant_id = t.id where s.user_id = #{userId} and s.delete_flag =#{DELETE_FLAG_AVAILABLE} limit 1
+    </select>
+
+</mapper>

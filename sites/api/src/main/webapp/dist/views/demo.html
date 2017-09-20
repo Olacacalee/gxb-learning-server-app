@@ -1,0 +1,111 @@
+<pre style="font-size: 0.320004rem">
+// 在app.js里面设置了全局dialog，可在局部去覆盖默认设置
+// - 背景层不可点击关闭dialog
+// - esc键不可关闭dialog
+// - 默认显示关闭按钮
+parameter.ngDialog.open({
+    // 设置dialog ng的模板Id，也可以是html代码片段
+    template: 'dialog' + num,
+    // 设定在哪个controller里面调用 如果一个页面需要dialog1 打开dialog2 这必须要写
+    controller: 'gxb.controllers.demo.demoCtrl',
+    // 是否显示关闭按钮
+    showClose: true,
+    // 点击mask层是否可以关闭 dialog
+    closeByDocument: false,
+    // esc键是否可以关闭 dialog
+    closeByEscape: false
+});
+
+// 有回调的
+parameter.ngDialog.open({
+    template: 'dialog-chapter-lock',
+    scope: parameter.$scope,
+    callback: function (ngdialog) {
+        console.log(ngdialog);
+    }
+});
+
+// 1500ms后自动消失
+parameter.ngDialog.open({
+    template: 'dialog-chapter-lock',
+    scope: parameter.$scope,
+    timeout: 1500
+});
+</pre>
+<p style="font-size: 0.53334rem; padding: 1em;">
+    <a href="javascript:;" ng-click="opens(1)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 1</a>
+    <a href="javascript:;" ng-click="opens(2)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 2</a>
+    <a href="javascript:;" ng-click="opens(3)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 3</a>
+    <a href="javascript:;" ng-click="opens(4)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 4</a>
+    <a href="javascript:;" ng-click="opens(5)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 5</a>
+    <a href="javascript:;" ng-click="opens1()" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">没有关闭按钮的dialog</a>
+    <a href="javascript:;" ng-click="opens(7)" style="border: 1px solid #000; padding: 0.5em; margin-right: 0.133335rem; margin-bottom: 0.133335rem; display: block;">Dialog 7</a>
+</p>
+
+<script type="text/ng-template" id="dialog1">
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd weui-dialog__bd--images">此章被锁住啦，请按顺序学习哦！</div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog2">
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">情绪管理能力自我测试</strong></div>
+        <div class="weui-dialog__bd">
+            <p><span>你的得分为：<span><span>77</span>分</span></span><span>属于：<span>完美型</span></span></p>
+            <p class="text-left">情绪管理，指通过研究个体和群体对自身情绪和他人情绪的认识，培养驾驭情绪的能力并由此产生良好的管理效果。情绪无好坏之分只划分为积极情绪、消极情绪。由情绪引发的行为则有好坏之分、行为的后果有好坏之分所以说，情绪管理并非是消灭情绪也没有必要消灭，而是疏导情绪、并合理化之后的信念与行为。</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="closeThisDialog()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog7">
+    <div class="weui-dialog">
+        <!-- <div class="weui-dialog__hd"><strong class="weui-dialog__title">情绪管理能力自我测试</strong></div> -->
+        <div class="weui-dialog__bd">
+            <div class="pic" style="background:url(../images/active.png) no-repeat;background-size: cover;width: 503px;height: 392px;margin:59px auto 0;"></div>
+            <p style="margin-top:50px;text-align: center;color:#2DB1FF;font: 24px;">你的性格类型是：<span style="color:#FFB456;font-size: 28px;display: inline-block;width: 120px;height: 40px;border-radius: 4px;border:1px solid #FFB456;line-height: 40px;">活跃型</span></p>
+            <!-- <p><span>你的得分为：<span><span>77</span>分</span></span><span>属于：<span>完美型</span></span></p>
+            <p class="text-left">情绪管理，指通过研究个体和群体对自身情绪和他人情绪的认识，培养驾驭情绪的能力并由此产生良好的管理效果。情绪无好坏之分只划分为积极情绪、消极情绪。由情绪引发的行为则有好坏之分、行为的后果有好坏之分所以说，情绪管理并非是消灭情绪也没有必要消灭，而是疏导情绪、并合理化之后的信念与行为。</p> -->
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="closeThisDialog()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog3">
+    <div class="weui-dialog">
+        <div class="weui-dialog__hd"><strong class="weui-dialog__title">第三章章节测试</strong></div>
+        <div class="weui-dialog__bd">
+            <p>你答对了<span>1</span>道题，答错了<span>9</span>道题，继续加油</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="closeThisDialog()">重测一遍？</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="">继续认知之旅 →</a>
+        </div>
+    </div>
+</script>
+
+<script type="text/ng-template" id="dialog4">
+    <div class="weui-dialog">
+        <div class="weui-dialog__bd">
+            <p class="text-left">现在处于2G/3G/4G网络下，是否继续播放视频？</p>
+        </div>
+        <div class="weui-dialog__ft">
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_default" ng-click="">暂不</a>
+            <a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_primary" ng-click="closeThisDialog()">继续</a>
+        </div>
+    </div>
+</script>
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">空白模板直接写代码吧</p>
+</script>
+
+<script type="text/ng-template" id="dialog6">
+    <p class="ngDialog-text text-center">空白模板直接写代码吧</p>
+</script>

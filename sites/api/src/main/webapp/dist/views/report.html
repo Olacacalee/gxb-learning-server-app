@@ -1,0 +1,150 @@
+<div class="page-report-wrap">
+<div class="no_create" ng-if="guide && status == 1 && !id">
+	<div class="headerBg">
+		<div class="box">
+			<div class="imgBg"></div>
+			<div class="imgBg01"></div>
+		</div>
+		<div class="box01">
+			<div class="headPortrait"></div>
+		</div>
+		<img src="{{UserInfo.avatar}}" alt="">
+	</div>
+	<p>你有一份认知报告正在生成......</p>
+</div>
+
+<div class="me_data" ng-if="status == 0 && guide && !id">
+	<div class="me_message">
+		<div class="headBg">
+			<img src="{{UserInfo.avatar}}" alt="">
+		</div>
+		<p class="name">{{UserInfo.nickname}}</p>
+		<p class="character" ng-bind-html="date(data.time)"></p>
+		<span>我成为第</span>
+		<p class="character size01">{{data.count}}</p>
+		<span>位拿到报告的童鞋</span>
+		<button ng-click="goReport()">查看认知报告<i class="iconfont icon-shape"></i></button>
+	</div>
+	<p class="add">每个人都有不可被辜负的天赋</p>
+</div>
+
+<div ng-if="!guide">
+	<div ng-if="animation"> 
+		<div class="animation_wrap zoom"></div>
+		<div class="animation zoomIn">
+			<div class="flagBg rollIn"></div>
+			<div class="flagBg01 roll"></div>
+		</div>
+		<span class="an2 word animated">＋2</span>
+		<span class="an3" ng-bind-html="animations()"></span>
+	</div>
+	<div class="share_animation_wrap" ng-if="shareAn">
+		<div class="share_animation" ng-click="hideAnimation()"></div>
+		<div class="share_bg">
+			<div class="wifi-circle first"></div>
+			<div class="wifi-circle second"></div>
+			<div class="wifi-circle third"></div>	
+			<div class="wifi-circle fourth"></div>
+		</div>
+		<p>点击右上角分享给朋友</p>
+	</div>
+	<div ng-class="shareAn?'box':'box02'">
+		<div class="bannerBg">我的认知报告</div>
+		<div class="dl-wrap">
+			<dl ng-if="report.selfconscious">
+				<dt>自我意识</dt>
+				<dd>{{report.selfconscious}}</dd>
+			</dl>
+			<dl ng-if="report.personalitycharacteristics">
+				<dt>人格特征</dt>
+				<dd>{{report.personalitycharacteristics}}</dd>
+			</dl>
+			<dl ng-if="report.careerplanning">
+				<dt>生涯规划</dt>
+				<dd>{{report.careerplanning}}</dd>
+			</dl>
+			<dl ng-if="report.Learningpsychology">
+				<dt>学习心理</dt>
+				<dd>{{report.Learningpsychology}}</dd>
+			</dl>
+			<dl ng-if="report.emotionalmanagement">
+				<dt>情绪管理</dt>
+				<dd>{{report.emotionalmanagement}}</dd>
+			</dl>
+			<dl ng-if="report.interpersonalcommunication">
+				<dt>人际交往</dt>
+				<dd>{{report.interpersonalcommunication}}</dd>
+			</dl>
+			<dl ng-if="report.loveemotion">
+				<dt>恋爱情感</dt>
+				<dd>{{report.loveemotion}}</dd>
+			</dl>
+			<dl ng-if="report.pressuremanagement">
+				<dt>压力管理</dt>
+				<dd>{{report.pressuremanagement}}</dd>
+			</dl>
+		</div>
+		<ul class="foot" ng-if="show">
+			<li ng-click="share()"><span class="iconfont icon-wechat"></span>我要晒一晒</li>
+			<li ng-if="credit" ng-click="getCredit()"><span class="iconfont icon-exchange"></span>申请学分</li>
+			<li ng-if="!ctrdit" ng-click="getCredit()" class="li01"><span class="iconfont icon-exchange"></span>已获得2学分</li>
+		</ul>
+	</div>
+</div>
+<div ng-if="id">
+	<div class="share_animation_wrap" ng-if="shareAn">
+		<div class="share_animation" ng-click="hideAnimation()"></div>
+		<div class="share_bg">
+			<div class="wifi-circle first"></div>
+			<div class="wifi-circle second"></div>
+			<div class="wifi-circle third"></div>	
+			<div class="wifi-circle fourth"></div>
+		</div>
+		<p>点击右上角分享给朋友</p>
+	</div>
+	<div class="bannerBg">{{name}}的认知报告</div>
+	<div class="dl-wrap">
+		<dl ng-if="report.selfconscious">
+			<dt>自我意识</dt>
+			<dd>{{report.selfconscious}}</dd>
+		</dl>
+		<dl ng-if="report.personalitycharacteristics">
+			<dt>人格特征</dt>
+			<dd>{{report.personalitycharacteristics}}</dd>
+		</dl>
+		<dl ng-if="report.careerplanning">
+			<dt>生涯规划</dt>
+			<dd>{{report.careerplanning}}</dd>
+		</dl>
+		<dl ng-if="report.Learningpsychology">
+			<dt>学习心理</dt>
+			<dd>{{report.Learningpsychology}}</dd>
+		</dl>
+		<dl ng-if="report.emotionalmanagement">
+			<dt>情绪管理</dt>
+			<dd>{{report.emotionalmanagement}}</dd>
+		</dl>
+		<dl ng-if="report.interpersonalcommunication">
+			<dt>人际交往</dt>
+			<dd>{{report.interpersonalcommunication}}</dd>
+		</dl>
+		<dl ng-if="report.loveemotion">
+			<dt>恋爱情感</dt>
+			<dd>{{report.loveemotion}}</dd>
+		</dl>
+		<dl ng-if="report.pressuremanagement">
+			<dt>压力管理</dt>
+			<dd>{{report.pressuremanagement}}</dd>
+		</dl>
+	</div>
+	<ul class="foot" ng-if="show">
+		<li ng-click="share()"><span class="iconfont icon-wechat"></span>我要晒一晒</li>
+		<li ng-if="credit" ng-click="getCredit()"><span class="iconfont icon-exchange"></span>申请学分</li>
+		<li ng-if="!ctrdit" ng-click="getCredit()" class="li01"><span class="iconfont icon-exchange"></span>已获得2学分</li>
+	</ul>
+</div>
+</div>
+
+<script type="text/ng-template" id="dialog5">
+    <p class="ngDialog-text text-center">{{message}}</p>
+</script>

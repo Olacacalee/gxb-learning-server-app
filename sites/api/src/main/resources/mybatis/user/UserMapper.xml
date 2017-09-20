@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.user.dao.UserDao">
+
+    <select id="getByMobile" resultType="User">
+        SELECT * from user where mobile = #{mobile} limit 1;
+    </select>
+
+    <insert id="save" parameterType="User" useGeneratedKeys="true" keyProperty="userId">
+
+        insert into user (username,name,gender,
+        mobile,email,encrypted_password,confirm_status,status,uuid,delete_flag,
+        created_at,updated_at)
+        values
+        (#{username},#{name},#{gender},
+        #{mobile},#{email},#{encryptedPassword},#{confirmStatus}
+        ,#{status},#{uuid},#{deleteFlag},
+        #{createdAt},#{updatedAt})
+    </insert>
+
+    <select id="countByMobile" resultType="Integer" >
+        <bind name="USER_NOT_ACTIVATED" value="@com.gxb.modules.constants.DomainConstants@USER_NOT_ACTIVATED"/>
+        select count(1) from user where mobile = #{0} and status != #{USER_NOT_ACTIVATED}
+    </select>
+
+    <select id="getById" resultType="User">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        select * from user where user_id = #{userId} AND delete_flag = #{DELETE_FLAG_AVAILABLE};
+    </select>
+
+    <update id="update" parameterType="User">
+
+        update user set username = #{username},name = #{name},gender = #{gender},
+        mobile = #{mobile},email = #{email},encrypted_password = #{encryptedPassword},confirm_status = #{confirmStatus},
+        status = #{status},uuid = #{uuid},delete_flag = #{deleteFlag},
+        updated_at = #{updatedAt} where user_id = ${userId}
+
+    </update>
+
+</mapper>
