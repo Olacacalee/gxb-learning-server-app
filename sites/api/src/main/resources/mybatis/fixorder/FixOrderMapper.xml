@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.fixorder.dao.FixOrderDao">
+
+    <insert id="save" parameterType="FixOrder" useGeneratedKeys="true" keyProperty="fixOrderId">
+        insert into fix_order (car_type,car_number,driver,driver_mobile,send_time,fix_status,finish_time,price,fixer,created_at,updated_at) VALUES
+        (#{carType},#{carNumber},#{driver},#{driverMobile},#{sendTime},#{fixStatus},#{finishTime},#{price},#{fixer},now(),now())
+    </insert>
+
+</mapper>

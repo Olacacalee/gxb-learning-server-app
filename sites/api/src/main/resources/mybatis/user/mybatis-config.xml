@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!-- 配置mybatis的缓存，延迟加载等等一系列属性 -->
+    <settings>
+        <setting name="mapUnderscoreToCamelCase" value="true"/>
+        <setting name="autoMappingBehavior" value="FULL"/>
+    </settings>
+
+    <typeHandlers>
+        <typeHandler handler="com.gxb.sites.api.db.type.ConvertTypeHandler"/>
+    </typeHandlers>
+
+	<plugins>
+		<plugin interceptor="com.gxb.sites.api.db.plugin.PagePlugin"></plugin>
+	</plugins>
+
+
+</configuration>
