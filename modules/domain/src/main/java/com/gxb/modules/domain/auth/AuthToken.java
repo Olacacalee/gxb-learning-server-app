@@ -22,7 +22,6 @@ public class AuthToken implements Serializable{
     private String token;
     private String cid;
     private Long userId;
-    private Long tenantId;
     private Date createdAt;
     private Date deadTime;
     private List<String> unionId;

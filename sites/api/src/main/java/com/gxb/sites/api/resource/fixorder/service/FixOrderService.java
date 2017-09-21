@@ -2,11 +2,9 @@ package com.gxb.sites.api.resource.fixorder.service;
 
 import com.gxb.modules.core.domain.FilterDomain;
 import com.gxb.modules.domain.fixorder.FixOrder;
-import com.gxb.sites.api.config.constant.TransactionConstant;
 import com.gxb.sites.api.resource.fixorder.dao.FixOrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

@@ -22,14 +22,12 @@ public class FixOrderCtl {
 
     @RequestMapping(value = "/fixorder", method = RequestMethod.POST)
     @ResponseBody
-    @AccessTokenCheck(false)
     public Long saveFixOrder(@RequestBody FixOrder fixOrder){
         return fixOrderService.saveFixOrder(fixOrder);
     }
 
     @RequestMapping(value = "/fixorder/list", method = RequestMethod.GET)
     @ResponseBody
-    @AccessTokenCheck(false)
     public FilterDomain<FixOrder> getAllFixOrder(FilterDomain<FixOrder> filterDomain){
         return fixOrderService.getAllFixOrder(filterDomain);
     }

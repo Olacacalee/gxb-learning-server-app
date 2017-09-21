@@ -63,7 +63,7 @@ public class AccessTokenInterceptor extends HandlerInterceptorAdapter {
                     }
                     return false;
                 }
-                AuthToken authToken = authTokenService.token(access_token, "app");//accessTokenService.checkToken(access_token, "app");
+                AuthToken authToken = authTokenService.token(access_token);//accessTokenService.checkToken(access_token, "app");
                 if (StringTools.isNotBlank(StringTools.getString(authToken.getUserId()))) {
                     request.setAttribute("accessToken", authToken);
                     UserContent.setUser(authToken);

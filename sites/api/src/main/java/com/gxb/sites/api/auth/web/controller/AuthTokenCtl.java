@@ -24,30 +24,12 @@ public class AuthTokenCtl extends BasicCtl {
     @Autowired
     private RedisCacheService redisCacheService;
 
-//    @RequestMapping("/token/{accessToken}")
-//    @ResponseBody
-    public AuthToken token(String accessToken,String type){
-        String tokenPrefix = DomainConstants.GXB_WECHAT_TOKEN_FREFIX;
+    public AuthToken token(String accessToken){
+        String tokenPrefix = DomainConstants.CAR_TOKEN_SURFIX;
         accessToken = tokenPrefix + accessToken;
         AuthToken authToken;
         authToken = (AuthToken) redisCacheService.getObject(accessToken);
 
-        /*if (authToken==null){
-            authToken = authTokenService.loadToken(accessToken);
-            if (authToken!=null){//数据库有token
-                if (authToken.getDeadTime()!=null){//有失效期
-                    if (authToken.getDeadTime().getTime() > new Date().getTime()){//还没失效
-                        redisCacheService.putObject(accessToken, authToken);
-                    }else {//失效了
-                        authTokenService.remove(accessToken);
-                        authToken = null;
-                    }
-                }else {//无失效期
-                    redisCacheService.putObject(accessToken, authToken);
-                }
-
-            }
-        }*/
         if (authToken==null){
             authToken=new AuthToken();
         }
