@@ -33,7 +33,7 @@ public class UserService {
             dbUser.setUpdatedAt(null);
             return new ResultObject("1","登录成功",dbUser);
         }
-        return new ResultObject("0","密码错误",dbUser);
+        return new ResultObject("0","密码错误",null);
     }
 
 }

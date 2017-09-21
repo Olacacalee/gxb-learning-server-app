@@ -10,43 +10,14 @@
 
     <context:component-scan base-package="com.gxb.modules.cache.service"  />
 
-    <!--<bean id="redisCache1" class="org.springframework.data.redis.cache.RedisCache">-->
-        <!--<constructor-arg value="master" index="0"/>-->
-        <!--<constructor-arg value="gxb:" index="1"/>-->
-        <!--<constructor-arg ref="redisTemplate1" index="2"/>-->
-        <!--<constructor-arg value="10000" type="java.lang.Long" index="3"/>-->
-    <!--</bean>-->
 
-    <!--<bean id="redisCache2" class="org.springframework.data.redis.cache.RedisCache">-->
-        <!--<constructor-arg value="master" index="0"/>-->
-        <!--<constructor-arg value="gxb:" index="1"/>-->
-        <!--<constructor-arg ref="redisTemplate2" index="2"/>-->
-        <!--<constructor-arg value="10000" type="java.lang.Long" index="3"/>-->
+	<!--<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">-->
+        <!--<property name="master">-->
+            <!--<bean class="org.springframework.data.redis.connection.RedisNode">-->
+                <!--<property name="name" value="mymaster1"/>-->
+            <!--</bean>-->
+        <!--</property>-->
     <!--</bean>-->
-
-	<bean id="redisSentinelConfiguration" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
-        <property name="master">
-            <bean class="org.springframework.data.redis.connection.RedisNode">
-                <property name="name" value="mymaster1"/>
-            </bean>
-        </property>
-        <property name="sentinels">
-            <set>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel1.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel1.port}"/>
-                </bean>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel2.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel2.port}"/>
-                </bean>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel3.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel3.port}"/>
-                </bean>
-            </set>
-        </property>
-    </bean>
 
     <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
         <property name="maxIdle" value="${cache.redis.maxIdle}"/>
@@ -59,8 +30,8 @@
 	<bean id="jedisConnectionFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
         <property name="hostName" value="${cache.redis.master1.ip}"/>
         <property name="port" value="${cache.redis.master1.port}"/>
-        <constructor-arg ref="redisSentinelConfiguration" index="0"/>
-        <constructor-arg ref="jedisPoolConfig" index="1"/>
+        <!--<constructor-arg ref="redisSentinelConfiguration" index="0"/>-->
+        <!--<constructor-arg ref="jedisPoolConfig" index="1"/>-->
     </bean>
 	<bean id="redisTemplate1" class="org.springframework.data.redis.core.RedisTemplate" p:connectionFactory-ref="jedisConnectionFactory">
         <property name="keySerializer">
@@ -77,60 +48,4 @@
         </property>
     </bean>
 
-
-	<bean id="redisSentinelConfiguration2" class="org.springframework.data.redis.connection.RedisSentinelConfiguration">
-        <property name="master">
-            <bean class="org.springframework.data.redis.connection.RedisNode">
-                <property name="name" value="mymaster2"/>
-            </bean>
-        </property>
-        <property name="sentinels">
-            <set>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel1.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel1.port}"/>
-                </bean>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel2.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel2.port}"/>
-                </bean>
-                <bean class="org.springframework.data.redis.connection.RedisNode">
-                    <constructor-arg name="host" value="${cache.redis.sentinel3.ip}"/>
-                    <constructor-arg name="port" value="${cache.redis.sentinel3.port}"/>
-                </bean>
-            </set>
-        </property>
-    </bean>
-
-    <bean id="jedisPoolConfig2" class="redis.clients.jedis.JedisPoolConfig">
-        <property name="maxIdle" value="${cache.redis.maxIdle}"/>
-        <property name="maxTotal" value="${cache.redis.maxTotal}"/>
-        <property name="maxWaitMillis" value="${cache.redis.maxWait}"/>
-        <property name="testOnBorrow" value="${cache.redis.testOnBorrow}"/>
-        <property name="testOnReturn" value="${cache.redis.testOnReturn}"/>
-    </bean>
-
-    <bean id="jedisConnectionFactory2"
-          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory" >
-        <property name="hostName" value="${cache.redis.master2.ip}"/>
-        <property name="port" value="${cache.redis.master2.port}"/>
-        <constructor-arg ref="redisSentinelConfiguration2" index="0"/>
-        <constructor-arg ref="jedisPoolConfig2" index="1"/>
-    </bean>
-    <bean id="redisTemplate2" class="org.springframework.data.redis.core.RedisTemplate"
-          p:connectionFactory-ref="jedisConnectionFactory2"
-            >
-        <property name="keySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
-        </property>
-        <property name="valueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
-        </property>
-        <property name="hashKeySerializer">
-            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
-        </property>
-        <property name="hashValueSerializer">
-            <bean class="org.springframework.data.redis.serializer.JdkSerializationRedisSerializer"/>
-        </property>
-    </bean>
 </beans>

@@ -24,7 +24,7 @@ public class UserCtl {
     @RequestMapping(value = "/user/login", method = RequestMethod.POST)
     @ResponseBody
     @AccessTokenCheck(false)
-    public ResultObject login(User user){
+    public ResultObject login(@RequestBody User user){
         return userService.login(user);
     }
 
