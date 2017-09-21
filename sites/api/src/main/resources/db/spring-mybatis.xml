@@ -8,50 +8,6 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
 	   default-lazy-init="true">
 
-	<!--### cas数据库的MyBatis配置 -->
-	<bean id="casSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="casDataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.gxb" />
-		<property name="mapperLocations" value="classpath:/mybatis/*/*Mapper.xml" />
-	</bean>
-
-	<!-- 扫描 basePackage下所有CasRepository dao -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.gxb" />
-		<property name="annotationClass" value="com.gxb.sites.api.annotation.CasRepository" />
-		<property name="sqlSessionFactoryBeanName" value="casSqlSessionFactory" />
-	</bean>
-
-	<!-- 对casDataSource 数据源进行事务管理 -->
-	<bean id="casTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="casDataSource" />
-	</bean>
-	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="casTransactionManager" proxy-target-class="true" />
-
-	<!--### api数据库的MyBatis配置 -->
-	<bean id="apiSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="apiDataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.gxb" />
-		<property name="mapperLocations" value="classpath:/mybatis/*/*Mapper.xml" />
-	</bean>
-
-	<!-- 扫描basePackage下所有dao -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.gxb" />
-		<property name="annotationClass" value="com.gxb.sites.api.annotation.ApiRepository" />
-		<property name="sqlSessionFactoryBeanName" value="apiSqlSessionFactory" />
-	</bean>
-
-	<!-- 对apiDataSource 数据源进行事务管理 -->
-	<bean id="apiTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="apiDataSource" />
-	</bean>
-	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="apiTransactionManager" proxy-target-class="true" />
-
 	<!--### lcms数据库的MyBatis配置 -->
 	<bean id="lcmsSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
 		<property name="dataSource" ref="lcmsDataSource" />
@@ -76,48 +32,4 @@
 	<!-- 使用annotation定义事务 -->
 	<tx:annotation-driven transaction-manager="lcmsTransactionManager" proxy-target-class="true" />
 
-	<!--### cms数据库的MyBatis配置 -->
-	<bean id="cmsSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="cmsDataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.gxb" />
-		<property name="mapperLocations" value="classpath:/mybatis/*/*Mapper.xml" />
-	</bean>
-
-	<!-- 扫描basePackage下所有dao -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.gxb" />
-		<property name="annotationClass" value="com.gxb.sites.api.annotation.CmsRepository" />
-		<property name="sqlSessionFactoryBeanName" value="cmsSqlSessionFactory" />
-	</bean>
-
-	<!-- 对cmsDataSource 数据源进行事务管理 -->
-	<bean id="cmsTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="cmsDataSource" />
-	</bean>
-	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="cmsTransactionManager" proxy-target-class="true" />
-
-
-	<!--### logs数据库的MyBatis配置 -->
-	<bean id="logSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-		<property name="dataSource" ref="logDataSource" />
-		<property name="configLocation" value="classpath:mybatis-config.xml" />
-		<property name="typeAliasesPackage" value="com.gxb" />
-		<property name="mapperLocations" value="classpath:/mybatis/*/*Mapper.xml" />
-	</bean>
-
-	<!-- 扫描basePackage下所有dao -->
-	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.gxb" />
-		<property name="annotationClass" value="com.gxb.sites.api.annotation.LogRepository" />
-		<property name="sqlSessionFactoryBeanName" value="logSqlSessionFactory" />
-	</bean>
-
-	<!-- 对cmsDataSource 数据源进行事务管理 -->
-	<bean id="logTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-		<property name="dataSource" ref="logDataSource" />
-	</bean>
-	<!-- 使用annotation定义事务 -->
-	<tx:annotation-driven transaction-manager="logTransactionManager" proxy-target-class="true" />
 </beans>

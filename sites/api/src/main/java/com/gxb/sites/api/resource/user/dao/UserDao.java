@@ -5,11 +5,9 @@ import com.gxb.modules.domain.user.User;
 import com.gxb.sites.api.annotation.LcmsRepository;
 
 /**
- * Created by Administrator on 2016-10-14.
+ * Created by xing on 2017/9/21.
  */
 @LcmsRepository
 public interface UserDao extends BasicDao<User> {
-    User getByMobile(String mobile);
-
-    int countByMobile(String mobile);
+    User getByUsername(String username);
 }

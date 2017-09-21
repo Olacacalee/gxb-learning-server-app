@@ -11,9 +11,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * Domain基础类
- * @author lh
- * @date 2013-11-18
+ * Created by xing on 2017/9/21.
  */
 @Data
 @EqualsAndHashCode
@@ -22,8 +20,6 @@ import java.util.Date;
 public abstract class BasicDomain implements Serializable {
 	private static final long serialVersionUID = -3905527698553456808L;
 
-//    protected Integer position;
-//    protected String status;
     protected Integer deleteFlag;
     protected Date createdAt;
     protected Date updatedAt;
