@@ -10,4 +10,8 @@
         (#{carType},#{carNumber},#{driver},#{driverMobile},#{sendTime},#{fixStatus},#{finishTime},#{price},#{fixer},now(),now())
     </insert>
 
+    <select id="getAllFixOrder" resultType="FixOrder">
+        SELECT * from fix_order
+    </select>
+
 </mapper>

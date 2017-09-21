@@ -1,5 +1,6 @@
 package com.gxb.sites.api.resource.fixorder.app.controller;
 
+import com.gxb.modules.core.domain.FilterDomain;
 import com.gxb.modules.domain.fixorder.FixOrder;
 import com.gxb.sites.api.resource.fixorder.service.FixOrderService;
 import com.gxb.sites.api.sys.auth.AccessTokenCheck;
@@ -23,8 +24,14 @@ public class FixOrderCtl {
     @ResponseBody
     @AccessTokenCheck(false)
     public Long saveFixOrder(@RequestBody FixOrder fixOrder){
-        fixOrder.setFixStatus("0");
         return fixOrderService.saveFixOrder(fixOrder);
+    }
+
+    @RequestMapping(value = "/fixorder/list", method = RequestMethod.GET)
+    @ResponseBody
+    @AccessTokenCheck(false)
+    public FilterDomain<FixOrder> getAllFixOrder(FilterDomain<FixOrder> filterDomain){
+        return fixOrderService.getAllFixOrder(filterDomain);
     }
 
 }
