@@ -2,6 +2,7 @@ package com.gxb.sites.api.resource.fixorder.service;
 
 import com.gxb.modules.core.domain.FilterDomain;
 import com.gxb.modules.domain.fixorder.FixOrder;
+import com.gxb.modules.domain.result.ResultObject;
 import com.gxb.sites.api.resource.fixorder.dao.FixOrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,16 +18,20 @@ public class FixOrderService {
     @Autowired
     private FixOrderDao fixOrderDao;
 
-    public Long saveFixOrder(FixOrder fixOrder){
+    public ResultObject saveFixOrder(FixOrder fixOrder){
         fixOrder.setFixStatus("0");
         fixOrderDao.save(fixOrder);
-        return fixOrder.getFixOrderId();
+        return new ResultObject("1","保存成功",fixOrder.getFixOrderId());
     }
 
     public FilterDomain<FixOrder> getAllFixOrder(FilterDomain<FixOrder> filter){
         List<FixOrder> fixOrderList = fixOrderDao.getAllFixOrder(filter);
         filter.setDataList(fixOrderList);
         return filter;
+    }
+
+    public ResultObject getByOrderId(Long fixOrderId){
+        return new ResultObject("1","保存成功",fixOrderDao.getByOrderId(fixOrderId));
     }
 
 }

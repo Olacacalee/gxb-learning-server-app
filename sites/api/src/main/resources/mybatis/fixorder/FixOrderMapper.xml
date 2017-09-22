@@ -14,4 +14,8 @@
         SELECT * from fix_order
     </select>
 
+    <select id="getByOrderId" resultType="FixOrder">
+        SELECT * from fix_order where fix_order_id = #{fixOrderId}
+    </select>
+
 </mapper>

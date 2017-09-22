@@ -15,4 +15,6 @@ public interface FixOrderDao extends BasicDao<FixOrder>{
 
     List<FixOrder> getAllFixOrder(FilterDomain<FixOrder> filter);
 
+    FixOrder getByOrderId(Long fixOrderId);
+
 }
