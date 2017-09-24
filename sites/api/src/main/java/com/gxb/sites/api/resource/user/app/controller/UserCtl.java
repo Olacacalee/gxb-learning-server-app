@@ -17,6 +17,16 @@ public class UserCtl {
     private UserService userService;
 
     /**
+     * 检验是否登录
+     * @return
+     */
+    @RequestMapping(value = "/user/check", method = RequestMethod.GET)
+    @ResponseBody
+    public String check(){
+        return "ok";
+    }
+
+    /**
      * 检查是否是新用户
      * @param user
      * @return
