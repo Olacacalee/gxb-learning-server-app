@@ -18,22 +18,59 @@ public class FixOrderCtl {
     @Autowired
     private FixOrderService fixOrderService;
 
+    /**
+     * 保存维修工单
+     * @param fixOrder
+     * @return
+     */
     @RequestMapping(value = "/fixorder", method = RequestMethod.POST)
     @ResponseBody
     public ResultObject saveFixOrder(@RequestBody FixOrder fixOrder){
         return fixOrderService.saveFixOrder(fixOrder);
     }
 
+    /**
+     * 维修工单列表
+     * @param filterDomain
+     * @return
+     */
     @RequestMapping(value = "/fixorder/list", method = RequestMethod.GET)
     @ResponseBody
     public FilterDomain<FixOrder> getAllFixOrder(FilterDomain<FixOrder> filterDomain){
         return fixOrderService.getAllFixOrder(filterDomain);
     }
 
+    /**
+     * 获取工单详情
+     * @param fixOrderId
+     * @return
+     */
     @RequestMapping(value = "/fixorder/fixOrderId/{fixOrderId}", method = RequestMethod.GET)
     @ResponseBody
     public ResultObject getByOrderId(@PathVariable Long fixOrderId){
         return fixOrderService.getByOrderId(fixOrderId);
+    }
+
+    /**
+     * 更新维修工单
+     * @param fixOrder
+     * @return
+     */
+    @RequestMapping(value = "/fixorder", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResultObject updateFixOrder(@RequestBody FixOrder fixOrder){
+        return fixOrderService.updateFixOrder(fixOrder);
+    }
+
+    /**
+     * 删除维修工单
+     * @param fixOrderId
+     * @return
+     */
+    @RequestMapping(value = "/fixorder/fixOrderId/{fixOrderId}", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResultObject deleteFixOrder(@PathVariable Long fixOrderId){
+        return fixOrderService.deleteFixOrder(fixOrderId);
     }
 
 }

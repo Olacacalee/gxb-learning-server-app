@@ -34,4 +34,14 @@ public class FixOrderService {
         return new ResultObject("1","保存成功",fixOrderDao.getByOrderId(fixOrderId));
     }
 
+    public ResultObject updateFixOrder(FixOrder fixOrder){
+        fixOrderDao.update(fixOrder);
+        return new ResultObject("1","更新成功",null);
+    }
+
+    public ResultObject deleteFixOrder(Long fixOrderId){
+        fixOrderDao.delete(fixOrderId);
+        return new ResultObject("1","删除成功",null);
+    }
+
 }

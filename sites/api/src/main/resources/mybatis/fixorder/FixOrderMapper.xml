@@ -11,11 +11,52 @@
     </insert>
 
     <select id="getAllFixOrder" resultType="FixOrder">
-        SELECT * from fix_order
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT * from fix_order where delete_flag = #{DELETE_FLAG_AVAILABLE}
     </select>
 
     <select id="getByOrderId" resultType="FixOrder">
-        SELECT * from fix_order where fix_order_id = #{fixOrderId}
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT * from fix_order where fix_order_id = #{fixOrderId} and delete_flag = #{DELETE_FLAG_AVAILABLE}
     </select>
+
+    <update id="update" parameterType="FixOrder">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        update fix_order set
+        <if test="carType != null">
+            car_type = #{carType},
+        </if>
+        <if test="carNumber != null">
+            car_number = #{carNumber},
+        </if>
+        <if test="driver != null">
+            driver = #{driver},
+        </if>
+        <if test="driverMobile != null">
+            driver_mobile = #{driverMobile},
+        </if>
+        <if test="sendTime != null">
+            send_time = #{sendTime},
+        </if>
+        <if test="fixStatus != null">
+            fix_status = #{fixStatus},
+        </if>
+        <if test="finishTime != null">
+            finish_time = #{finishTime},
+        </if>
+        <if test="price != null">
+            price = #{price},
+        </if>
+        <if test="fixer != null">
+            fixer = #{fixer},
+        </if>
+        updated_at = now()
+        where fix_order_id = #{fixOrderId} and delete_flag = #{DELETE_FLAG_AVAILABLE}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        <bind name="DELETE_FLAG_DISABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        update fix_order set delete_flag = #{DELETE_FLAG_DISABLE},updated_at = now() where fix_order_id = #{fixOrderId}
+    </delete>
 
 </mapper>
