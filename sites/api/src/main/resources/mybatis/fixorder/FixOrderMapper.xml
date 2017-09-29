@@ -13,6 +13,9 @@
     <select id="getAllFixOrder" resultType="FixOrder">
         <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
         SELECT * from fix_order where delete_flag = #{DELETE_FLAG_AVAILABLE}
+        <if test="filter.search != null ">
+            and driver like concat('%',#{filter.search},'%')
+        </if>
     </select>
 
     <select id="getByOrderId" resultType="FixOrder">
@@ -55,7 +58,7 @@
     </update>
 
     <delete id="delete" parameterType="Long">
-        <bind name="DELETE_FLAG_DISABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        <bind name="DELETE_FLAG_DISABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_DISABLE"/>
         update fix_order set delete_flag = #{DELETE_FLAG_DISABLE},updated_at = now() where fix_order_id = #{fixOrderId}
     </delete>
 
