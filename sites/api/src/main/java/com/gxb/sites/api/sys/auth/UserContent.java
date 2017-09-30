@@ -1,6 +1,7 @@
 package com.gxb.sites.api.sys.auth;
 
 import com.gxb.modules.domain.auth.AuthToken;
+import com.gxb.modules.domain.tenant.Tenant;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,8 @@ public class UserContent implements Serializable {
     private static final long serialVersionUID = -5662131076635716070L;
 
     public static final ThreadLocal<AuthToken> userThreadLocal = new ThreadLocal<>();
+
+    public static final ThreadLocal<Tenant> tenantThreadLocal = new ThreadLocal<>();
 
     public static final ThreadLocal<HttpServletRequest> requestThreadLocal = new ThreadLocal<>();
 
@@ -59,6 +62,16 @@ public class UserContent implements Serializable {
 
     public static AuthToken getUser() {
         return userThreadLocal.get();
+    }
+
+    public static void setTenant(Tenant tenant) {
+        if (null != tenant) {
+            tenantThreadLocal.set(tenant);
+        }
+    }
+
+    public static Tenant getTenant() {
+        return tenantThreadLocal.get();
     }
 
     /**

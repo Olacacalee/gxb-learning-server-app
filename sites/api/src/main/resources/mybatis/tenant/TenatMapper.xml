@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.tenant.dao.TenantDao">
+
+    <insert id="save" parameterType="Tenant" keyProperty="tenantId" useGeneratedKeys="true">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        insert into tenant (tenant_name,shortname,created_at,updated_at,delete_flag)
+        VALUES
+        (#{tenantId},#{shortname},now(),now(),#{DELETE_FLAG_AVAILABLE})
+    </insert>
+
+    <select id="getByShortname" resultType="Tenant">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        select * from tenant where shortname = #{shortname} and delete_flag = #{DELETE_FLAG_AVAILABLE}
+    </select>
+
+</mapper>

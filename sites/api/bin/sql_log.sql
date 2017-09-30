@@ -39,3 +39,13 @@ CREATE TABLE `car_fix`.`contact` (
 	`delete_flag` tinyint(4),
 	PRIMARY KEY (`contact_id`)
 ) COMMENT='';
+
+CREATE TABLE `car_fix`.`tenant` (
+	`tenant_id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '租户id',
+	`tenant_name` varchar(100) NOT NULL COMMENT '租户名称',
+	`shortname` varchar(100) NOT NULL COMMENT '二级域名',
+	`created_at` datetime NOT NULL COMMENT '创建时间',
+	`updated_at` datetime NOT NULL,
+	`delete_flag` tinyint(4) NOT NULL,
+	PRIMARY KEY (`tenant_id`)
+) COMMENT='';

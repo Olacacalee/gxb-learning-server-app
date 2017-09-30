@@ -1,8 +1,10 @@
 package com.gxb.sites.api.sys.auth;
 
+import com.gxb.modules.domain.tenant.Tenant;
 import com.gxb.sites.api.auth.web.controller.AuthTokenCtl;
 import com.gxb.modules.domain.auth.AuthToken;
 import com.gxb.modules.utils.StringTools;
+import com.gxb.sites.api.resource.tenant.dao.TenantDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -26,6 +28,8 @@ public class AccessTokenInterceptor extends HandlerInterceptorAdapter {
 //    private AccessTokenService accessTokenService;
     @Autowired
     private AuthTokenCtl authTokenService;
+    @Autowired
+    private TenantDao tenantDao;
 
     public AccessTokenInterceptor() {
         super();
@@ -38,6 +42,11 @@ public class AccessTokenInterceptor extends HandlerInterceptorAdapter {
             access_token = (String) request.getAttribute("access_token");
         }
         if (handler instanceof HandlerMethod) {
+
+            String url = request.getServerName();
+            Tenant tenant = tenantDao.getByShortname(StringTools.getShortName(url));
+            UserContent.setTenant(tenant);
+
             AccessTokenCheck accessTokenCheck;
             HandlerMethod methodHandler = (HandlerMethod) handler;
             accessTokenCheck = methodHandler.getMethodAnnotation(AccessTokenCheck.class);
