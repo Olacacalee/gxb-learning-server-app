@@ -27,3 +27,15 @@ CREATE TABLE `car_fix`.`fix_order` (
 	`updated_at` datetime COMMENT '工单更新时间',
 	PRIMARY KEY (`fix_order_id`)
 ) COMMENT='';
+
+CREATE TABLE `car_fix`.`contact` (
+	`contact_id` bigint(10) NOT NULL AUTO_INCREMENT COMMENT '主键，联系人id',
+	`contact_name` varchar(100) NOT NULL COMMENT '联系人姓名',
+	`contact_mobile` varchar(50) COMMENT '联系人手机号',
+	`contact_car_type` varchar(100) COMMENT '联系人的车型',
+	`contact_car_number` varchar(100) COMMENT '联系人车牌号',
+	`created_at` datetime NOT NULL COMMENT '创建时间',
+	`updated_at` datetime COMMENT '更新时间',
+	`delete_flag` tinyint(4),
+	PRIMARY KEY (`contact_id`)
+) COMMENT='';

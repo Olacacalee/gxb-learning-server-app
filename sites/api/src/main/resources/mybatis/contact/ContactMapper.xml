@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- namespace必须指向Dao接口 -->
+<mapper namespace="com.gxb.sites.api.resource.contact.dao.ContactDao">
+
+    <insert id="save" parameterType="Contact" useGeneratedKeys="true" keyProperty="contactId">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        insert into contact (contact_name,contact_mobile,contact_car_type,contact_car_number,created_at,updated_at,delete_flag)
+        VALUES
+        (#{contactName},#{contactMobile},#{contactCarType},#{contactCarNumber},now(),now(),#{DELETE_FLAG_AVAILABLE})
+    </insert>
+
+    <select id="getById" resultType="Contact">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT * from contact where contact_id = #{contactId} and delete_flag = #{DELETE_FLAG_AVAILABLE};
+    </select>
+
+    <select id="getContactList" resultType="Contact">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        SELECT * from contact where delete_flag = #{DELETE_FLAG_AVAILABLE}
+    </select>
+
+    <update id="update" parameterType="Contact">
+        <bind name="DELETE_FLAG_AVAILABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_AVAILABLE"/>
+        update contact set
+        <if test="contactName != null">
+            contact_name = #{contactName},
+        </if>
+        <if test="contactMobile != null">
+            contact_mobile = #{contactMobile},
+        </if>
+        <if test="contactCarType != null">
+            contact_car_type = #{contactCarType},
+        </if>
+        <if test="contactCarNumber != null">
+            contact_car_number = #{contactCarNumber},
+        </if>
+        updated_at = now()
+        where contact_id = #{contactId} and delete_flag = #{DELETE_FLAG_AVAILABLE}
+    </update>
+
+    <delete id="delete" parameterType="Long">
+        <bind name="DELETE_FLAG_DISABLE" value="@com.gxb.modules.constants.DomainConstants@DELETE_FLAG_DISABLE"/>
+        update contact set delete_flag = #{DELETE_FLAG_DISABLE},updated_at = now() where contact_id = #{contactId}
+    </delete>
+
+</mapper>
